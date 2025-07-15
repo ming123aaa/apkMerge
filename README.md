@@ -1,3 +1,7 @@
+
+## 使用
+通过使用gui界面来操作[apkMerge_gui](https://github.com/ming123aaa/apkMerge_gui)
+
 ## 如何编译成可运行的jar
 ### 1.设置 Artifacts
 打开idea  
@@ -15,24 +19,12 @@
 build->build Artifacts->选中刚刚设置的Artifacts->等待jar生成
 
 
+
+
 ## 使用jar
 查看命令帮助
 java -jar gameSdkTool.jar -h
-
-合并smali环境:
-
-java -jar gameSdkTool.jar -baseSmali "主包smali路径" -channelSmali "渠道框架smali环境" -mergeSmali
-
-可使用 -useChannelRes 覆盖冲突文件(默认不覆盖),-useChannelCode 渠道包的代码优先 等命令
-
-
-修改smali环境(换包名、图标、应用名):
-java -jar gameSdkTool.jar -changeSmali "需要修改的smali路径" -apkConfig "ApkConfig.json的路径"
-
-
 常用用法已经写成.bat文件了，可以直接使用 [tools](tools)
-
-对于批量打渠道包功能，可使用界面操作 项目地址[https://gitee.com/oneEyeTrue/kmp_apk-sdk-tool_gui](https://gitee.com/oneEyeTrue/kmp_apk-sdk-tool_gui)
 
 
 ## 运行参数
