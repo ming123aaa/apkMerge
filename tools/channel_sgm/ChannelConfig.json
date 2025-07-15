@@ -1,0 +1,39 @@
+{
+    "buildDirFile": "build",
+    "outDirFile": "buildOutApk",
+    "enableChannelNames": [],
+    "items": [
+        {
+            "channelName": "sgm_douyin",
+            "apkConfigFile": "ApkConfig_douyin.json",
+            "signConfigFile": "SignConfig.json",
+            "mode": "merge",
+            "extraCmd": [
+                "-useChannelCode"
+            ],
+            "channelApkFile": "sdk_empty-release-unsigned.apk"
+        },
+        {
+            "channelName": "sgm_HY1",
+            "apkConfigFile": "ApkConfig_HY1.json",
+            "signConfigFile": "SignConfig.json",
+            "mode": "simple_fast",
+            "extraCmd": [
+                "-useChannelRes",
+                "-useChannelCode"
+            ],
+            "channelApkFile": ""
+        },
+        {
+            "channelName": "sgm_GG1",
+            "apkConfigFile": "ApkConfig_GG1.json",
+            "signConfigFile": "SignConfig.json",
+            "mode": "simple_fast",
+            "extraCmd": [
+                "-useChannelRes",
+                "-useChannelCode"
+            ],
+            "channelApkFile": "" 
+        }
+    ]
+}

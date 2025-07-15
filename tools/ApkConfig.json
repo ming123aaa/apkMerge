@@ -1,0 +1,24 @@
+{
+  "packageName": "com.aaa.bbb",
+  "iconImgPath": "a.png",
+  "iconSize": "-xxhdpi",
+  "appName": "app名称",
+  "versionCode":"",
+  "versionName": "",
+  "abiNames": ["arm64-v8a"],
+  "changeClassPackage": {
+
+    "com.ohuang.demo": "xxxx_com.ohuang.demo",
+    "androidx": "xxx_androidx"
+  },
+  "renameResMap": {
+    "string": {
+      "app_name": "xxx_app_name"
+    },
+    "layout": {
+      "activity_main": "xxx_activity_main"
+    }
+
+  }
+
+}

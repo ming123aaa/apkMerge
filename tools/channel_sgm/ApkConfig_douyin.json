@@ -1,0 +1,15 @@
+{
+    "packageName": "",
+    "iconImgPath": "",
+    "iconSize": "",
+    "appName": "",
+    "versionCode": "",
+    "versionName": "",
+    "minSdkVersion": "",
+    "targetSdkVersion": "",
+    "abiNames": [],
+    "metaDataMap": {
+        "FENGXIAME_SDK_CHANNEL": "douyin"
+    
+    }
+}
