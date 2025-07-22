@@ -177,7 +177,7 @@ object ReplaceAPk {
         val saxReader2 = SAXReader()
         val read2 = saxReader2.read(path2)
         val rootElement2 = read2.rootElement
-        val applictionElement2 = rootElement2.element("application")
+        val applictionElement2 = getOrAddApplictionElement(rootElement2)
         replacePackage(rootElement2, packageName, applictionElement2)
         replaceVersion(versionCode, rootElement2, versionName, minSdkVersion, targetSdkVersion)
         replaceMetaData(applictionElement2, metaDataMap)

@@ -15,7 +15,7 @@ private const val temp_smali = "/temp_smali"
  */
 fun limitSize_smali_class_Dir(baseSmail: String, maxMB: Long) {
     if (maxMB > 0 && maxMB < 1000) {
-        var findSmaliClass = findSmali_Class(baseSmail)
+        var findSmaliClass = findSmaliClassDirSort(baseSmail)
         if (findSmaliClass.isNotEmpty()) {
             var tempFileDir = File(baseSmail + temp_smali)
             findSmaliClass.forEach { path ->
@@ -35,7 +35,7 @@ fun limitSize_smali_class_Dir(baseSmail: String, maxMB: Long) {
  */
 fun deleteSmaliPath(baseSmail: String,deletePath: List<String>){
     if (deletePath.isNotEmpty()){
-        var findSmaliClass = findSmali_Class(baseSmail)
+        var findSmaliClass = findSmaliClassDirSort(baseSmail)
         if (findSmaliClass.isNotEmpty()) {
             println("开始删除指定smali文件")
             findSmaliClass.forEach { classDir ->
@@ -63,7 +63,7 @@ fun deleteSmaliPath(baseSmail: String,deletePath: List<String>){
  */
 fun deleteSameNameSmali(baseSmail: String){
     println("开始删除同名不会被加载的smali")
-    var findSmaliClass = findSmali_Class(baseSmail)
+    var findSmaliClass = findSmaliClassDirSort(baseSmail)
     var smaliPath= HashSet<String>()
     var deletePath= HashSet<String>()
     findSmaliClass.forEach { classDir ->
@@ -94,7 +94,7 @@ private fun copySmali_Class(oldPath: String, newPath: String, maxMB: Long) {
         smailMaxMB = maxMB
     }
     println("限制smali_classes大小 $smailMaxMB MB")
-    var findSmaliClass = findSmali_Class(oldPath)
+    var findSmaliClass = findSmaliClassDirSort(oldPath)
     var class_index = 1
     var maxFileSize = smailMaxMB * MB_DIV_B
     var totalSize: Long = 0
@@ -119,7 +119,7 @@ private fun copySmali_Class(oldPath: String, newPath: String, maxMB: Long) {
     }
 }
 
-private fun getSmailDir(path: String, num: Int): String {
+ fun getSmailDir(path: String, num: Int): String {
     if (num == 1) {
         return "$path/smali"
     } else {
@@ -127,7 +127,10 @@ private fun getSmailDir(path: String, num: Int): String {
     }
 }
 
-private fun findSmali_Class(path: String): List<String> {
+/**
+ * 获取smali_class目录  按照顺序获取
+ */
+ fun findSmaliClassDirSort(path: String): List<String> {
     val smailDirFilePaths = ArrayList<String>()
     var num = 1
     var cacheFile = File(getSmailDir(path, num))

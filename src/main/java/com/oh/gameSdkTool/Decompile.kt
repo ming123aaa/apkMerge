@@ -82,7 +82,7 @@ object Decompile {
             "cmd.exe", "/c", cmd
         )
 
-        val exec = ExecUtil.execAndPrint(
+        val exec = ExecUtil.exec(
             arrayOf,
             60 * 60, GlobalConfig.isLog
         )
@@ -219,7 +219,7 @@ object Decompile {
                     "--out \"${outFile.absolutePath}\" $signVersionCmd --ks  " +
                     "\"${signConfigBean.signingPath}\"  --ks-pass pass:\"${signConfigBean.passWord}\" --ks-key-alias \"${signConfigBean.alias}\""+keyPsdCmd
         println(cmd)
-        var execAndPrint = ExecUtil.execAndPrint(
+        var execAndPrint = ExecUtil.exec(
             arrayOf(
                 "cmd.exe", "/c", cmd
             ),
@@ -254,7 +254,7 @@ object Decompile {
             "${zipalign.replace(" ", "\" \"")}  -f -v 4 \"${oldApkPath}\"  \"${file.absolutePath}\""
         println(cmd)
         var arrycmd = arrayOf("cmd.exe", "/c", cmd)
-        var exec = ExecUtil.execAndPrint(
+        var exec = ExecUtil.execWaitStringStop(
             arrycmd,
             30 * 60, "Verification succesful",GlobalConfig.isLog
         )
@@ -286,7 +286,7 @@ object Decompile {
         val cmd =
             "$java -Dfile.encoding=utf-8 -jar \"$apktool\" b \"${smaliPath}\" -o \"${outApkfile.absolutePath}\""
         println(cmd)
-        var execAndPrint = ExecUtil.execAndPrint(arrayOf("cmd.exe", "/c", cmd), 60 * 60, GlobalConfig.isLog)
+        var execAndPrint = ExecUtil.exec(arrayOf("cmd.exe", "/c", cmd), 60 * 60, GlobalConfig.isLog)
         println(execAndPrint)
     }
 }

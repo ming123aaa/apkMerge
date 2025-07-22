@@ -5,26 +5,52 @@ import org.dom4j.Attribute
 import org.dom4j.Element
 import org.dom4j.io.SAXReader
 import java.io.File
-import javax.xml.crypto.dsig.Manifest
 import kotlin.collections.set
 
 
 const val AndroidManifest = "/AndroidManifest.xml"
 
 /**
+ * 获取manifest的package
+ */
+fun getManifestPackage(path: String): String? {
+    if (!File(path).exists()) {
+        return null
+    }
+    tryCatch {
+        val saxReader = SAXReader()
+        val read = saxReader.read(path)
+        val rootElement = read.rootElement
+        return rootElement.attribute("package").data as String
+    }
+    return null
+}
+
+/**
  *  path 合并到mainPath   mainPath内容在前
  *
  */
+@Deprecated(message = "请使用mergeSafeManifest", replaceWith = ReplaceWith(expression = "mergeSafeManifest(path=path,mainPath=mainPath,outPath=outPath)"))
 fun mergeManifest(path: String, mainPath: String, outPath: String = mainPath) {
+    if (!File(path).exists() || !File(mainPath).exists()) {
+        if (File(path).exists()) {
+            copyFile(path, outPath)
+        } else if (File(mainPath).exists()) {
+            copyFile(mainPath, outPath)
+        }
+        return
+    }
     val saxReader = SAXReader()
     val read = saxReader.read(path)
     val rootElement = read.rootElement
-    val packge = rootElement.attribute("package").data as String
+
 
     val saxReader2 = SAXReader()
     val read2 = saxReader2.read(mainPath)
     val rootElement2 = read2.rootElement
-    val applictionElement2 = rootElement2.element("application")
+
+    val packge = rootElement.attribute("package").data as String
+    val applictionElement2: Element = getOrAddApplictionElement(rootElement2)
     val packge2 = rootElement2.attribute("package").data as String
 
     rootElement.elements().forEach {
@@ -71,6 +97,13 @@ fun mergeManifest(path: String, mainPath: String, outPath: String = mainPath) {
     rootElement2.remove(applictionElement2)
     rootElement2.add(applictionElement2)
     saveXml(outPath, read2)
+}
+
+ fun getOrAddApplictionElement(rootElement2: Element): Element = runCatching {
+    return@runCatching rootElement2.element("application")
+}.getOrNull() ?: run {
+    val createElement = rootElement2.addElement("application")
+    createElement
 }
 
 fun manifestDeleteName(manifestPath: String, deleteNames: Set<String>) {
@@ -121,6 +154,11 @@ fun mergeSafeManifest(
     isReplaceApplication: Boolean = false
 ) {
     if (!File(path).exists() || !File(mainPath).exists()) {
+        if (File(path).exists()) {
+            copyFile(path, outPath)
+        } else if (File(mainPath).exists()) {
+            copyFile(mainPath, outPath)
+        }
         return
     }
     tryCatch {
@@ -131,7 +169,7 @@ fun mergeSafeManifest(
         val saxReader2 = SAXReader()
         val read2 = saxReader2.read(mainPath)
         val rootElement2 = read2.rootElement
-        val applictionElement2 = rootElement2.element("application")
+        val applictionElement2 = getOrAddApplictionElement(rootElement2)
         var packge2 = packge
         tryCatch {
             packge2 = rootElement2.attribute("package").data as String
@@ -225,7 +263,7 @@ private fun copyApplicationElement(
     }
     mainApplictionElement.setAttributes(attributes)
     if (isReplaceApplication) {
-        tryCatch (GlobalConfig.isLog){
+        tryCatch(GlobalConfig.isLog) {
             val attribute = appliction.attribute("name")
             val applicationName = attribute.data as String
             println("applicationName 替换成 $applicationName")

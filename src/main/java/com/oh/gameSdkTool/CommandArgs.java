@@ -88,6 +88,9 @@ public class CommandArgs {
     @Parameter(names = "-channelConfig", description = "设置ChannelConfig.json配置文件")
     public String channelConfig="";
 
+    @Parameter(names = {"-aarConfig"}, description = "设置aarConfig.json配置文件")
+    public String aarConfig="";
+
 
     @Parameter(names = {"-test"}, description = "action命令,测试运行")
     public boolean isTest = false;
@@ -129,6 +132,12 @@ public class CommandArgs {
 
     @Parameter(names = {"-toZip"},description = "action命令,压缩apk 需要配合-basePath、-out")
     public boolean toZip=false;
+
+    @Parameter(names = {"-apk2aar"},description = "action命令,将apk转化为aar,配合命令-basePath、-out、-lib、-aarConfig")
+    public boolean isApk2Aar=false;
+
+    @Parameter(names = {"-mergeAar"},description = "action命令,合并aar,配合命令-out、-lib、-aarConfig")
+    public boolean isMergeAar=false;
 
     @Parameter(names = {"-help", "-h"}, help = true, description = "查看帮助")
     public boolean help;

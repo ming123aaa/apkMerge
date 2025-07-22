@@ -23,6 +23,8 @@ object ArgsRunTime {
             OutChannelConfigRun(),
             UnzipRun(),
             ZipRun(),
+            AArMergeRun(),
+            ApkToAarRun(),
         )
 
         for (run in arrayOf) {

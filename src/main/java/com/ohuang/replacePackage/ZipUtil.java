@@ -180,15 +180,15 @@ public class ZipUtil {
      */
     public static Boolean toZip(String zipFileName, String sourceFileName, boolean KeepDirStructure) {
         Boolean result = true;
-        long start = System.currentTimeMillis();//开始
+
         ZipOutputStream zos = null;
         try {
             FileOutputStream fileOutputStream = new FileOutputStream(zipFileName);
             zos = new ZipOutputStream(fileOutputStream);
             File sourceFile = new File(sourceFileName);
             compress(sourceFile, zos, sourceFile.getName(), KeepDirStructure,true);
-            long end = System.currentTimeMillis();//结束
-            System.out.println("压缩完成，耗时：" + (end - start) + " 毫秒");
+
+
         } catch (Exception e) {
             result = false;
             e.printStackTrace();

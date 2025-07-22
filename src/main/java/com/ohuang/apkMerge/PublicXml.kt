@@ -4,6 +4,7 @@ import com.oh.gameSdkTool.bean.NewName
 import com.oh.gameSdkTool.bean.OldName
 import com.oh.gameSdkTool.bean.ResType
 import org.dom4j.io.SAXReader
+import java.io.File
 
 /**
  *   数据结构为 map<type,<name,id>>
@@ -65,8 +66,16 @@ fun readPublicToIdNode(path: String):Map<String,PublicXmlNode>{
     return hashMap
 }
 
-
+/**
+ * 合并两个public.xml  path合并到path2
+ */
 fun mergePublicXml(path: String, path2: String) {
+    if (!File(path).exists()||!File(path2).exists()){
+        if (File(path).exists()){
+            copyFile(path, path2)
+        }
+        return
+    }
     var saxReader = SAXReader()
     var read = saxReader.read(path)
     var rootElement = read.rootElement

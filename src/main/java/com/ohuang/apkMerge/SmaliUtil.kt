@@ -1,5 +1,6 @@
 package com.ohuang.apkMerge
 
+
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
@@ -355,44 +356,25 @@ fun findSmaliClassesDir(path: String): MutableList<String> {
  * 返回新复制的smali list
  */
 fun copySmaliClass(path: String, outPath: String): List<String> {
-    var file = File(path)
-    val file1 = File(outPath)
-    var index = 1
-    file1.listFiles()?.forEach {
-        if (it.isDirectory) {
-            if (it.name.startsWith("smali_classes")) {
-                val string = StringBuffer().append(it.name).toString().replace("smali_classes", "")
-                val i = string.toInt()
-                if (i > index) {
-                    index = i
-                }
-            }
-        }
+    val oldList = findSmaliClassDirSort(path)
+    val outList = findSmaliClassDirSort(outPath)
+    var number=1
+    if(outList.isEmpty()){
+        number=1
+    }else{
+        number=outList.size+1
     }
-    val data = ArrayList<String>()
-    val smaliPath = "$outPath/smali_classes"
-    var smaliFile = File("$path/smali")
-    if (smaliFile.exists()) {
-        index++
-        println("------开始复制${smaliFile.name}到smali_classes" + index + "------")
-        copyPathAllFile(smaliFile.absolutePath, smaliPath + index)
-        data.add(smaliPath + index)
-    }
-    var p = 1
-    while (true) {
-        p++
-        smaliFile = File("$path/smali_classes$p")
-        if (smaliFile.exists()) {
-            index++
-            println("------开始复制${smaliFile.name}到smali_classes" + index + "------")
-            copyPathAllFile(smaliFile.absolutePath, smaliPath + index)
-            data.add(smaliPath + index)
-        } else {
-            break
-        }
+    val data = arrayListOf<String>()
+    oldList.forEach{
+        val file = File(it)
+        var smailDir = getSmailDir(outPath, number)
+        copyPathAllFile(file.absolutePath, smailDir)
+        data.add(smailDir)
     }
     return data
 }
+
+
 
 /**
  * 复制smali

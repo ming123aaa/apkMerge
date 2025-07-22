@@ -6,6 +6,7 @@ import org.dom4j.Document
 import org.dom4j.io.OutputFormat
 import org.dom4j.io.SAXReader
 import org.dom4j.io.XMLWriter
+import java.io.File
 import java.io.FileWriter
 
 
@@ -27,6 +28,14 @@ fun mergeXmlSafe(path: String, path2: String, outPath: String, usePath: Boolean 
  * 合并后path2的内容在前
  */
 fun mergeXml(path: String, path2: String, outPath: String) {
+    if (!File(path).exists() || !File(path2).exists()) {
+        if (File(path).exists()) {
+            copyFile(path, outPath)
+        } else if (File(path2).exists()) {
+            copyFile(path2, outPath)
+        }
+        return
+    }
     var saxReader = SAXReader()
     saxReader.encoding = "utf-8"
     var saxReader1 = SAXReader()

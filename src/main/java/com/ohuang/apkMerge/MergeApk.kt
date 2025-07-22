@@ -86,22 +86,7 @@ private fun mergeApk(
 
 
     println("---开始复制res---")
-    File("$channelSmali/res").listFiles()?.forEach {
-        val targetPath = "$baseSmali/res"
-        if (it.isDirectory) {
-            if (it.name.startsWith("values")) {
-                mergeValueXml(
-                    it.absolutePath,
-                    targetPath + "/${it.name}",
-                    isNewID = isNewId,
-                    usePath = isUseChannelFileRes
-                )
-            } else {
-                copyResChildDir(it.absolutePath, targetPath + "/${it.name}", isCover = isUseChannelFileRes)
-            }
-
-        }
-    }
+    mergeRes(channelSmali, baseSmali, isNewId, isUseChannelFileRes)
     println("---开始复制lib---")
     copyPathAllFile("$channelSmali/lib", "$baseSmali/lib", isCover = isUseChannelFileLib)
     println("---开始复制assets---")
@@ -150,6 +135,30 @@ private fun mergeApk(
         isUseChannelApktoolYml = isUseChannelApktoolYml
     )
 
+}
+
+ fun mergeRes(
+    channelSmali: String,
+    baseSmali: String,
+    isNewId: Boolean=false,
+    isUseChannelFileRes: Boolean=false
+) {
+     val targetPath = "$baseSmali/res"
+    File("$channelSmali/res").listFiles()?.forEach {
+        if (it.isDirectory) {
+            if (it.name.startsWith("values")) {
+                mergeValueXml(
+                    it.absolutePath,
+                    targetPath + "/${it.name}",
+                    isNewID = isNewId,
+                    usePath = isUseChannelFileRes
+                )
+            } else {
+                copyResChildDir(it.absolutePath, targetPath + "/${it.name}", isCover = isUseChannelFileRes)
+            }
+
+        }
+    }
 }
 
 /**
