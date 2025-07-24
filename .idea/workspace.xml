@@ -9,27 +9,25 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4eaafb40-8131-4eac-be98-0f0811b2834e" name="Changes" comment="1">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/Jar2Dex.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/bean/AarConfig.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/run/AArMergeRun.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/run/ApkToAarRun.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/aar/AArRes.kt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/aar/AarToSmali.kt" afterDir="false" />
+    <list default="true" id="4eaafb40-8131-4eac-be98-0f0811b2834e" name="Changes" comment="feat(toolbox): 添加 AAR 文件合并功能&#10;&#10;- 新增 AarConfig 类用于配置 AAR 文件合并参数&#10;- 实现 AAR 文件合并的核心逻辑和相关工具函数- 添加命令行参数支持 AAR 文件合并功能&#10;- 优化现有代码结构，提高可维护性和可扩展性">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/aar/MydeclareXml.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/ArgsRunTime.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/ArgsRunTime.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/CommandArgs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/CommandArgs.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/Decompile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/Decompile.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/ReplaceAPk.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/ReplaceAPk.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/config/LibConfig.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/config/LibConfig.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/run/AArMergeRun.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/run/AArMergeRun.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/run/ApkToAarRun.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/run/ApkToAarRun.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/run/TestRun.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/run/TestRun.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/aar/AArRes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/aar/AArRes.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/aar/AarToSmali.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/aar/AarToSmali.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/AndroidManifestUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/AndroidManifestUtil.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/MergeApk.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/MergeApk.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/CopyFile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/CopyFile.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/MergeApkRename.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/MergeApkRename.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/PublicXml.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/PublicXml.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/SmaliUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/SmaliUtil.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/Smali_ClassesUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/Smali_ClassesUtil.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/XmlUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/XmlUtil.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/replacePackage/ExecUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/replacePackage/ExecUtil.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/replacePackage/ZipUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/replacePackage/ZipUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/replacePackage/FileUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/replacePackage/FileUtils.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/replacePackage/FindRes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/replacePackage/FindRes.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -317,7 +315,15 @@
       <option name="project" value="LOCAL" />
       <updated>1752722687921</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="feat(toolbox): 添加 AAR 文件合并功能&#10;&#10;- 新增 AarConfig 类用于配置 AAR 文件合并参数&#10;- 实现 AAR 文件合并的核心逻辑和相关工具函数- 添加命令行参数支持 AAR 文件合并功能&#10;- 优化现有代码结构，提高可维护性和可扩展性">
+      <option name="closed" value="true" />
+      <created>1753163718287</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1753163718287</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -360,6 +366,7 @@
     <MESSAGE value="feat(gameSdkTool): 新增文件压缩和解压功能&#10;&#10;- 新增 UnzipRun 和 ZipRun 类，实现文件解压和压缩功能&#10;- 更新 CommandArgs 类，添加 toUnzip 和 toZip 参数- 在 ArgsRunTime 中添加 GenerateMultipleChannelApkRun、UnzipRun 和 ZipRun&#10;- 更新 ReplaceAPk 类，优化文件删除逻辑&#10;- 新增压缩和解压的批处理文件" />
     <MESSAGE value="refactor(gameSdkTool): 重构配置文件解析和渠道包生成逻辑&#10;&#10;- 优化 ApkConfigBean、ChannelConfigBean 和 SignConfigBean 的解析逻辑&#10;- 改进 ChannelApkBuild 中的渠道包生成流程&#10;- 统一异常处理，提高代码健壮性- 调整代码格式，提升可读性" />
     <MESSAGE value="1" />
-    <option name="LAST_COMMIT_MESSAGE" value="1" />
+    <MESSAGE value="feat(toolbox): 添加 AAR 文件合并功能&#10;&#10;- 新增 AarConfig 类用于配置 AAR 文件合并参数&#10;- 实现 AAR 文件合并的核心逻辑和相关工具函数- 添加命令行参数支持 AAR 文件合并功能&#10;- 优化现有代码结构，提高可维护性和可扩展性" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(toolbox): 添加 AAR 文件合并功能&#10;&#10;- 新增 AarConfig 类用于配置 AAR 文件合并参数&#10;- 实现 AAR 文件合并的核心逻辑和相关工具函数- 添加命令行参数支持 AAR 文件合并功能&#10;- 优化现有代码结构，提高可维护性和可扩展性" />
   </component>
 </project>

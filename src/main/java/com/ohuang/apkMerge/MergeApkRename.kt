@@ -282,7 +282,7 @@ private fun getChangePackageName(packageName: String, startsWithName: String): S
     return stringBuilder.deleteAt(stringBuilder.length - 1).toString()
 }
 
-private fun String.path2Package(): String {
+fun String.path2Package(): String {
     var a = replace("/", ".").replace("\\", ".")
     if (a.startsWith(".")) {
         a = a.substring(1)

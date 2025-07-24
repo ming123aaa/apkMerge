@@ -3,7 +3,7 @@ package com.ohuang.aar
 import com.oh.gameSdkTool.CommandArgs
 import com.oh.gameSdkTool.Jar2Dex
 import com.ohuang.apkMerge.copySmaliClass
-import com.ohuang.apkMerge.findSmaliClassDirSort
+import com.ohuang.apkMerge.findSmaliClassesDirSort
 import com.ohuang.apkMerge.mergeRes
 import com.ohuang.apkMerge.mergeSafeManifest
 import com.ohuang.replacePackage.FileUtils
@@ -12,12 +12,13 @@ import com.ohuang.replacePackage.copyPathAllFile
 import java.io.File
 
 
-private const val proguard = "/proguard.txt"
+const val proguard = "/proguard.txt"
 
-private const val RText = "/R.txt"
-private const val AndroidManifest = "/AndroidManifest.xml"
+const val RText = "/R.txt"
+const val PublicText = "/public.txt"
+const val AndroidManifest = "/AndroidManifest.xml"
 private val fileNameFilter =
-    setOf<String>("proguard.txt", "R.txt", "AndroidManifest.xml")
+    setOf<String>("proguard.txt", "R.txt", "public.txt", "AndroidManifest.xml")
 
 fun mergeAarSmali(oldAArSmali: String, newAArSmali: String) {
     File(oldAArSmali).listFiles().forEach {
@@ -27,11 +28,11 @@ fun mergeAarSmali(oldAArSmali: String, newAArSmali: String) {
         copyPathAllFile(oldAArSmali, newAArSmali, "/" + it.name)
     }
     copySmaliClass(oldAArSmali, newAArSmali)
-
     mergeRes(oldAArSmali, newAArSmali)
     mergeSafeManifest(path = oldAArSmali + AndroidManifest, mainPath = newAArSmali + AndroidManifest)
     mergeText(oldAArSmali, newAArSmali, proguard)
     mergeText(oldAArSmali, newAArSmali, RText)
+    mergeText(oldAArSmali, newAArSmali, PublicText)
 }
 
 /**
@@ -40,7 +41,7 @@ fun mergeAarSmali(oldAArSmali: String, newAArSmali: String) {
  * classBuildDir  jar生成需要文件夹
  */
 fun aarSmaliToAAr(commandArgs: CommandArgs, aarSmaliPath: String, aar: String, classBuildDir: String) {
-    var findSmaliClassesDir = findSmaliClassDirSort(aarSmaliPath)
+    var findSmaliClassesDir = findSmaliClassesDirSort(aarSmaliPath)
     var aarSmaliDir = File("$classBuildDir/temp_jar") //临时存放jar的目录
     if (!aarSmaliDir.exists()) {
         aarSmaliDir.mkdirs()
@@ -104,7 +105,7 @@ private fun mergeText(oldAArSmali: String, newAArSmali: String, fileName: String
     val newPath = newAArSmali + fileName
     var oldString = FileUtils.readText(oldPath)
     var string = FileUtils.readText(newPath)
-    FileUtils.writeText(File(newPath), string +"\n" +oldString)
+    FileUtils.writeText(File(newPath), string + "\n" + oldString)
 }
 
 

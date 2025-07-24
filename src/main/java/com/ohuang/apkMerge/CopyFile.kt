@@ -52,6 +52,9 @@ fun copyFile(sourcePath: String, targetPath: String, isCover: Boolean = false,is
     var file = File(sourcePath)
     if (file.exists()) {
         var file1 = File(targetPath)
+        if (!file1.parentFile.exists()){
+            file1.parentFile.mkdirs()
+        }
         if (!file1.exists() || isCover) {
             file.copyTo(file1,overwrite=true)
         }

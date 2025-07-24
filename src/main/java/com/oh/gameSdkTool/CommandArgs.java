@@ -66,16 +66,17 @@ public class CommandArgs {
     @Parameter(names = {"-replaceApplication"},description = "合并AndroidManifest.xml替换Application类  若配合-useChannelRes命令使用application会替换成变成主包的,否则application替换成渠道包的")
     public Boolean isReplaceApplication=false;
 
-    @Parameter(names = {"-changeNotRSmali"},description = "合并的时候强制改id,就算是非R.smali的文件内的Id也会被修改。不是特殊情况不要使用。")
+    @Parameter(names = {"-changeNotRSmali"},description = "修改没有引用R文件的id,通过修改0X7f开头的值实现。")
     public Boolean isChangeNotRSmali=false;
 
-    @Parameter(names = {"-isRenameRes"},description = "res出现重名情况,是否重命名")
+
+    @Parameter(names = {"-isRenameRes"},description = "res出现重名情况,是否重命名。apk合并时使用")
     public Boolean isRenameRes=false;
 
-    @Parameter(names = {"-isRenameClassPackage"},description = "class出现重名情况,是否修改package")
+    @Parameter(names = {"-isRenameClassPackage"},description = "class出现重名情况,是否修改package。apk合并时使用")
     public Boolean isRenameClassPackage=false;
 
-    @Parameter(names = {"-notUseDefaultKeepClassPackage"},description = "禁用默认的keep class规则")
+    @Parameter(names = {"-notUseDefaultKeepClassPackage"},description = "禁用默认的keep class规则。apk合并时使用")
     public boolean notUseDefaultKeepClassPackage=false;
 
     @Parameter(names = {"-apkConfig"}, description = "设置ApkConfig")
@@ -133,7 +134,7 @@ public class CommandArgs {
     @Parameter(names = {"-toZip"},description = "action命令,压缩apk 需要配合-basePath、-out")
     public boolean toZip=false;
 
-    @Parameter(names = {"-apk2aar"},description = "action命令,将apk转化为aar,配合命令-basePath、-out、-lib、-aarConfig")
+    @Parameter(names = {"-apk2aar","-apkToAar"},description = "action命令,将apk转化为aar,配合命令-basePath、-out、-lib、-aarConfig")
     public boolean isApk2Aar=false;
 
     @Parameter(names = {"-mergeAar"},description = "action命令,合并aar,配合命令-out、-lib、-aarConfig")

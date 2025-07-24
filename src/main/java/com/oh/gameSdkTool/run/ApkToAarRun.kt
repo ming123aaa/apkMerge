@@ -4,9 +4,12 @@ import com.oh.gameSdkTool.CommandArgs
 import com.oh.gameSdkTool.CommandRun
 import com.oh.gameSdkTool.Decompile
 import com.oh.gameSdkTool.ReplaceAPk
-import com.oh.gameSdkTool.bean.ApkConfigBean
 import com.oh.gameSdkTool.bean.toAarConfigData
 import com.oh.gameSdkTool.bean.toApkConfig
+import com.ohuang.aar.aarSmaliToAAr
+import com.ohuang.aar.copyToAArSmali
+import com.ohuang.aar.setAarSmali
+import com.ohuang.apkMerge.getManifestPackage
 import com.ohuang.apkMerge.tryCatch
 import com.ohuang.replacePackage.FileUtils
 import java.io.File
@@ -33,17 +36,42 @@ class ApkToAarRun: CommandRun()  {
                 println("删除-$buildDir")
                 FileUtils.delete(File(buildDir))
             }
-            Decompile.apkToSmali(commandArgs, "$buildDir/baseSmali", baseApk)
-            ReplaceAPk.replaceApK("$buildDir/baseSmali", aarConfigBean.toApkConfig())
-            val aarBuild= "$buildDir/aarBuild"
+            var aarName = if (aarConfigBean.outAArName.isNotBlank()) {
+                aarConfigBean.outAArName.replace(".", "_") + ".aar"
+            } else {
+                "out.aar"
+            }
+            var aarPath = "$outPath/$aarName"
+            var baseSmali = "$buildDir/baseSmali"
+            var newSmali = "$buildDir/newSmali"
+            var buildRJarDir = "$buildDir/buildRJarDir"
+            val classBuildDir = "${buildDir}/classBuildDir"
+            Decompile.apkToSmali(commandArgs,baseSmali, baseApk)
 
+            copyToAArSmali( baseSmali, newSmali)
+            val packageName=if (aarConfigBean.packageName.isBlank()) {
+                getManifestPackage("$newSmali/AndroidManifest.xml") ?: "com.xxx.yyy"
+            }else{
+                aarConfigBean.packageName
+            }
+            setAarSmali(commandArgs,newSmali,packageName ,buildRJarDir)
+            ReplaceAPk.replaceApK(newSmali, aarConfigBean.toApkConfig())
+            if (File(aarPath).exists()) {
+                FileUtils.delete(File(aarPath))
+            }
+            aarSmaliToAAr(commandArgs, newSmali, aarPath,classBuildDir)
+            if (File(aarPath).exists()) {
+                println("生成aar成功-$aarPath")
+            } else {
+                println("生成aar失败-$aarPath")
+            }
         }
     }
 
     private fun checkArgs(commandArgs: CommandArgs): Boolean {
-        println("Apk To Aar 功能暂时不正常")
+        println("Apk To Aar")
 
-        return false
+
         if (commandArgs.basePath.isEmpty()) {
             println("没有使用 -basePath 命令")
             return false

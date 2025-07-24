@@ -38,6 +38,8 @@ public class FileUtils {
         return "";
     }
 
+
+
     public static void writeText(File file, String s) {
         OutputStream fos = null;
 
@@ -62,7 +64,31 @@ public class FileUtils {
         } catch (IOException ioe) {
             ioe.getStackTrace();
         }
+    }
+    public static void appendText(File file, String s) {
+        OutputStream fos = null;
 
+        try {
+            if (!file.getParentFile().exists()) {
+                file.getParentFile().mkdirs();
+            }
+            //构造一个文件输出流对象
+            fos = new FileOutputStream(file,true);
+            //此时的文件输出流对象fos就和目标源数据源（FileOutputStreamTest.txt文件）关联起来
+            //利用文件输出流的方法把数据写入到文本中
+            String str = s;
+            byte[] words = str.getBytes();
+            //利用write方法将数据写入到文件中去
+            fos.write(words, 0, words.length);
+        } catch (IOException ioe) {
+            ioe.getStackTrace();
+        }
+        try {
+            //关闭文件输出流
+            fos.close();
+        } catch (IOException ioe) {
+            ioe.getStackTrace();
+        }
     }
 
     public static long getSize(File file) {

@@ -6,7 +6,7 @@ import com.oh.gameSdkTool.ReplaceAPk
 import com.oh.gameSdkTool.bean.toAarConfigData
 import com.oh.gameSdkTool.bean.toApkConfig
 import com.ohuang.aar.aarDirToArrSmali
-import com.ohuang.aar.aarRSmaliChangePackage
+import com.ohuang.aar.RSmaliChangePackage
 import com.ohuang.aar.aarSmaliToAAr
 import com.ohuang.aar.mergeAarSmali
 import com.ohuang.apkMerge.AndroidManifest
@@ -52,11 +52,14 @@ class AArMergeRun : CommandRun() {
                 index++
             }
             ReplaceAPk.replaceApK(baseSmali, aarConfigBean.toApkConfig())
+
+
+            RSmaliChangePackage(baseSmali, oldPackage, aarConfigBean.packageName)
+
             if (File(aarPath).exists()) {
                 FileUtils.delete(File(aarPath))
             }
             val classBuildDir: String = "${buildDir}/classBuildDir"
-            aarRSmaliChangePackage(baseSmali, oldPackage, aarConfigBean.packageName)
             aarSmaliToAAr(commandArgs, baseSmali, aarPath,classBuildDir)
             if (File(aarPath).exists()) {
                 println("生成aar成功-$aarPath")
@@ -74,8 +77,8 @@ class AArMergeRun : CommandRun() {
         oldPackages: HashSet<String>,
         buildPath: String
     ) {
-        val aarDirPath = "${buildPath}/aarDir${index}"
-        val baseSmali = "${buildPath}/baseSmali"
+        val aarDirPath = "${buildPath}/aarDir${index}" // 解压aar
+        val baseSmali = "${buildPath}/baseSmali" // 存放aar的smali
         val aarSmaliPath = "${buildPath}/aarSmali${index}"
         ZipUtil.unzip(aarFile.absolutePath, aarDirPath)
         aarDirToArrSmali(commandArgs, aarDirPath, aarSmaliPath)

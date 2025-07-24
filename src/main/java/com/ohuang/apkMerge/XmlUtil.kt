@@ -7,6 +7,7 @@ import org.dom4j.io.OutputFormat
 import org.dom4j.io.SAXReader
 import org.dom4j.io.XMLWriter
 import java.io.File
+import java.io.FileInputStream
 import java.io.FileWriter
 
 
@@ -40,8 +41,8 @@ fun mergeXml(path: String, path2: String, outPath: String) {
     saxReader.encoding = "utf-8"
     var saxReader1 = SAXReader()
     saxReader1.encoding = "utf-8"
-    var read = saxReader.read(path)
-    var read1 = saxReader1.read(path2)
+    var read = saxReader.readSafe(path)
+    var read1 = saxReader1.readSafe(path2)
     var rootElement = read.rootElement
     var rootElement1 = read1.rootElement
     rootElement.elements().forEach {
@@ -49,9 +50,15 @@ fun mergeXml(path: String, path2: String, outPath: String) {
         rootElement1.add(createCopy)
     }
 
+
     //保存
     saveXml(outPath, read1)
+}
 
+fun SAXReader.readSafe(path: String): Document {
+    FileInputStream(path).use {
+        return this.read(it)
+    }
 }
 
 fun saveXml(path2: String, read1: Document?) {
@@ -76,7 +83,7 @@ fun saveXml(path2: String, read1: Document?) {
 fun xmlRemoveIdenticalElement(path: String, key: String = "name") {
     var saxReader = SAXReader()
     saxReader.encoding = "utf-8"
-    var read = saxReader.read(path)
+    var read = saxReader.readSafe(path)
     val map = HashMap<String, Boolean>()
     var elements = read.rootElement.elements()
     elements.forEach {
@@ -99,7 +106,7 @@ fun xmlRemoveIdenticalElement(path: String, key: String = "name") {
 fun xmlReplaceName(xmlPath: String, renameMap: Map<OldName, NewName>) {
     var saxReader = SAXReader()
     saxReader.encoding = "utf-8"
-    var read = saxReader.read(xmlPath)
+    var read = saxReader.readSafe(xmlPath)
 
     var elements = read.rootElement.elements()
     elements.forEach {

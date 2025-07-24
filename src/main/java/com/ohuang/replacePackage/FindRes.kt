@@ -1,5 +1,6 @@
 package com.ohuang.replacePackage
 
+import com.ohuang.apkMerge.readSafe
 import com.ohuang.apkMerge.saveXml
 import org.dom4j.io.SAXReader
 import java.io.File
@@ -90,7 +91,7 @@ fun changeAppName(resPath:String,name:String,appName:String){
 private fun replaceAppName(it: String, name: String, appName: String) {
     var saxReader = SAXReader()
     saxReader.encoding = "utf-8"
-    var read = saxReader.read(it)
+    var read = saxReader.readSafe(it)
     var rootElement = read.rootElement
 
     rootElement.elements().forEach { el ->

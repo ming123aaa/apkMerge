@@ -5,19 +5,20 @@ import com.oh.gameSdkTool.bean.OldName
 import com.oh.gameSdkTool.bean.ResType
 import org.dom4j.io.SAXReader
 import java.io.File
+import java.util.TreeMap
 
 /**
  *   数据结构为 map<type,<name,id>>
  *   type 为mipmap attr string 等类型
  *
  */
-fun readPublic(path: String): HashMap<String, HashMap<String, String>> {
+fun readPublic(path: String): TreeMap<String, TreeMap<String, String>> {
     var saxReader = SAXReader()
-    var read = saxReader.read(path)
+    var read = saxReader.readSafe(path)
     var rootElement = read.rootElement
 
     var elements = rootElement.elements()
-    var hashMap = HashMap<String, HashMap<String, String>>()
+    var hashMap = TreeMap<String, TreeMap<String, String>>()
     elements.forEach {
         var type = it.attribute("type").data as String
         var name = it.attribute("name").data as String
@@ -26,14 +27,14 @@ fun readPublic(path: String): HashMap<String, HashMap<String, String>> {
         if (hashMap.containsKey(type)){
             var map = hashMap[type]
             if (map==null){
-                var map=HashMap<String,String>()
+                var map=TreeMap<String,String>()
                 map[name]=id
                 hashMap[type]=map
             }else {
                 map[name] = id
             }
         }else{
-            var map=HashMap<String,String>()
+            var map=TreeMap<String,String>()
             map[name]=id
             hashMap[type]=map
 
@@ -46,10 +47,11 @@ data class PublicXmlNode(val id:String,val type:String,val name:String)
 
 /**
  * 返回数据结构  map<id,PublicXmlNode>
+ *     id一般为16进制 0x7f000000
  */
 fun readPublicToIdNode(path: String):Map<String,PublicXmlNode>{
     val saxReader = SAXReader()
-    val read = saxReader.read(path)
+    val read = saxReader.readSafe(path)
     val rootElement = read.rootElement
 
     val elements = rootElement.elements()
@@ -77,7 +79,7 @@ fun mergePublicXml(path: String, path2: String) {
         return
     }
     var saxReader = SAXReader()
-    var read = saxReader.read(path)
+    var read = saxReader.readSafe(path)
     var rootElement = read.rootElement
     var elements = rootElement.elements()
 
@@ -161,7 +163,7 @@ fun mergePublicXml(path: String, path2: String) {
 
 fun mergePublicXmlWewId(path: String, path2: String) {
     val saxReader = SAXReader()
-    val read = saxReader.read(path)
+    val read = saxReader.readSafe(path)
     val rootElement = read.rootElement
     val elements = rootElement.elements()
 
@@ -218,7 +220,7 @@ fun mergePublicXmlWewId(path: String, path2: String) {
 
 fun publicXmlReName(publicXml:String,renameResMap: Map<ResType, Map<OldName, NewName>>){
     var saxReader = SAXReader()
-    var read = saxReader.read(publicXml)
+    var read = saxReader.readSafe(publicXml)
     var rootElement = read.rootElement
     var elements = rootElement.elements()
 

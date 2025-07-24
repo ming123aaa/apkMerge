@@ -356,8 +356,8 @@ fun findSmaliClassesDir(path: String): MutableList<String> {
  * 返回新复制的smali list
  */
 fun copySmaliClass(path: String, outPath: String): List<String> {
-    val oldList = findSmaliClassDirSort(path)
-    val outList = findSmaliClassDirSort(outPath)
+    val oldList = findSmaliClassesDirSort(path)
+    val outList = findSmaliClassesDirSort(outPath)
     var number=1
     if(outList.isEmpty()){
         number=1
@@ -415,65 +415,8 @@ fun copySmaliClassForFirst(path: String, outPath: String): List<String> {
 
 
 
-/**
- * 根据R.smali生成R.txt
- */
-fun generateRTxt(path: String, RTxtPath: String) {
-    val hashMap = findInSmaliResNameMap(path)
-    val file1 = File(RTxtPath)
-    if (file1.parentFile != null) {
-        file1.parentFile.mkdirs()
-    }
-    val fileWriter = FileWriter(file1)
-    hashMap.forEach {
-        val key = it.key
-        it.value.forEach { name ->
-            fileWriter.write("int ${key} ${name} 0x0\n")
-        }
-    }
-    fileWriter.close()
-}
 
-/**
- *
- *
- *   map<type,names>
- *
- *
- */
-private fun findInSmaliResNameMap(path: String): TreeMap<String, MutableSet<String>> {
-    val file = File(path)
-    val data = ArrayList<String>()
-    if (file.isDirectory) {
-        searchFileInPath(file.absolutePath, "R.smali", data)
-    } else if ("R.smali" == file.name) {
-        data.add(file.absolutePath)
-    }
-    val hashMap = TreeMap<String, MutableSet<String>>()
 
-    data.forEach { itS ->
-        println("----开始查找$itS-----")
-        val file1 = File(itS)
-        val parentFile = file1.parentFile
-        parentFile.listFiles()?.forEach { itF ->
-            if (itF.isFile) {
-                if (itF.name.startsWith("R\$")) {
-                    val type = itF.name.replace(".smali", "").replace("R\$", "")
-
-                    var set: MutableSet<String> = TreeSet()
-                    if (hashMap.containsKey(type)) {
-                        set = hashMap[type]!!
-                    } else {
-                        hashMap[type] = set
-                    }
-                    val rSmaliFieldName = getRSmaliFieldName(itF.absolutePath)
-                    set.addAll(rSmaliFieldName)
-                }
-            }
-        }
-    }
-    return hashMap
-}
 
 
 /**
@@ -497,19 +440,11 @@ fun deleteRSmali(path: String) {
         parentFile.listFiles()?.forEach { itF ->
             if (itF.isFile) {
                 if (itF.name.startsWith("R\$")) {
-                    var delete = itF.delete()
-                    if (delete) {
-                        println("删除文件" + itF.absolutePath)
-                    } else {
-                        println("删除文件失败" + itF.absolutePath)
-                    }
+                  itF.delete()
+
                 } else if (itF.name.equals("R.smali")) {
-                    var delete = itF.delete()
-                    if (delete) {
-                        println("删除文件" + itF.absolutePath)
-                    } else {
-                        println("删除文件失败" + itF.absolutePath)
-                    }
+                   itF.delete()
+
                 }
             }
         }

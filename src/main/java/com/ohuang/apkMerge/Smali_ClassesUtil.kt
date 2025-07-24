@@ -5,6 +5,7 @@ import com.ohuang.replacePackage.copyFile
 import com.ohuang.replacePackage.moveFile
 
 import java.io.File
+import java.util.LinkedList
 
 
 private const val MB_DIV_B = 1024 * 1024  // 字节和MB转换
@@ -14,8 +15,9 @@ private const val temp_smali = "/temp_smali"
  * 限制单个smali_Class的大小
  */
 fun limitSize_smali_class_Dir(baseSmail: String, maxMB: Long) {
+
     if (maxMB > 0 && maxMB < 1000) {
-        var findSmaliClass = findSmaliClassDirSort(baseSmail)
+        var findSmaliClass = findSmaliClassesDirSort(baseSmail)
         if (findSmaliClass.isNotEmpty()) {
             var tempFileDir = File(baseSmail + temp_smali)
             findSmaliClass.forEach { path ->
@@ -30,27 +32,58 @@ fun limitSize_smali_class_Dir(baseSmail: String, maxMB: Long) {
 }
 
 /**
+ * 删除空的smali_class目录
+ */
+fun deleteEmpty_smali_class_Dir(baseSmail: String) {
+    var findSmaliClassesDirSort = findSmaliClassesDirSort(baseSmail)
+    var newPath = LinkedList<String>()
+    findSmaliClassesDirSort.forEach {
+        if (hasFile(it)) {
+            if (newPath.isNotEmpty()) {
+                var removeAt = newPath.removeAt(0)
+                moveFile(it, removeAt)
+                newPath.add(it)
+            }
+        } else {
+            newPath.add(it)
+            FileUtils.delete(File(it))
+        }
+
+    }
+}
+
+private fun hasFile(path: String): Boolean {
+    var hasFile = false
+    forEachAllFile(File(path)) {
+        hasFile = true
+        true
+    }
+    return hasFile
+}
+
+
+/**
  *   '
  *   删除smali文件
  */
-fun deleteSmaliPath(baseSmail: String,deletePath: List<String>){
-    if (deletePath.isNotEmpty()){
-        var findSmaliClass = findSmaliClassDirSort(baseSmail)
+fun deleteSmaliPath(baseSmail: String, deletePath: List<String>) {
+    if (deletePath.isNotEmpty()) {
+        var findSmaliClass = findSmaliClassesDirSort(baseSmail)
         if (findSmaliClass.isNotEmpty()) {
             println("开始删除指定smali文件")
             findSmaliClass.forEach { classDir ->
-               var file= File(classDir)
-               deletePath.forEach { delete ->
-                   var path= file.absolutePath+if (delete.startsWith("/")){
-                       delete
-                   }else{
-                       "/$delete"
-                   }
-                   var deleteFile = File(path)
-                   if (deleteFile.exists()){
-                       FileUtils.delete(deleteFile)
-                   }
-               }
+                var file = File(classDir)
+                deletePath.forEach { delete ->
+                    var path = file.absolutePath + if (delete.startsWith("/")) {
+                        delete
+                    } else {
+                        "/$delete"
+                    }
+                    var deleteFile = File(path)
+                    if (deleteFile.exists()) {
+                        FileUtils.delete(deleteFile)
+                    }
+                }
             }
         }
     }
@@ -61,20 +94,20 @@ fun deleteSmaliPath(baseSmail: String,deletePath: List<String>){
  * 删除同名的smali
  *
  */
-fun deleteSameNameSmali(baseSmail: String){
+fun deleteSameNameSmali(baseSmail: String) {
     println("开始删除同名不会被加载的smali")
-    var findSmaliClass = findSmaliClassDirSort(baseSmail)
-    var smaliPath= HashSet<String>()
-    var deletePath= HashSet<String>()
+    var findSmaliClass = findSmaliClassesDirSort(baseSmail)
+    var smaliPath = HashSet<String>()
+    var deletePath = HashSet<String>()
     findSmaliClass.forEach { classDir ->
-        var file= File(classDir)
-        var  startIndex=file.absolutePath.length
-        forEachAllFile(file){
-            if (it.name.endsWith(".smali")){
-                var path=it.absolutePath.substring(startIndex)
-                if (smaliPath.contains(path)){
+        var file = File(classDir)
+        var startIndex = file.absolutePath.length
+        forEachAllFile(file) {
+            if (it.name.endsWith(".smali")) {
+                var path = it.absolutePath.substring(startIndex)
+                if (smaliPath.contains(path)) {
                     deletePath.add(it.absolutePath)
-                }else{
+                } else {
                     smaliPath.add(path)
                 }
             }
@@ -94,7 +127,7 @@ private fun copySmali_Class(oldPath: String, newPath: String, maxMB: Long) {
         smailMaxMB = maxMB
     }
     println("限制smali_classes大小 $smailMaxMB MB")
-    var findSmaliClass = findSmaliClassDirSort(oldPath)
+    var findSmaliClass = findSmaliClassesDirSort(oldPath)
     var class_index = 1
     var maxFileSize = smailMaxMB * MB_DIV_B
     var totalSize: Long = 0
@@ -119,7 +152,7 @@ private fun copySmali_Class(oldPath: String, newPath: String, maxMB: Long) {
     }
 }
 
- fun getSmailDir(path: String, num: Int): String {
+fun getSmailDir(path: String, num: Int): String {
     if (num == 1) {
         return "$path/smali"
     } else {
@@ -130,7 +163,7 @@ private fun copySmali_Class(oldPath: String, newPath: String, maxMB: Long) {
 /**
  * 获取smali_class目录  按照顺序获取
  */
- fun findSmaliClassDirSort(path: String): List<String> {
+fun findSmaliClassesDirSort(path: String): List<String> {
     val smailDirFilePaths = ArrayList<String>()
     var num = 1
     var cacheFile = File(getSmailDir(path, num))

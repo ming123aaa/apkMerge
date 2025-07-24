@@ -19,7 +19,7 @@ fun getManifestPackage(path: String): String? {
     }
     tryCatch {
         val saxReader = SAXReader()
-        val read = saxReader.read(path)
+        val read = saxReader.readSafe(path)
         val rootElement = read.rootElement
         return rootElement.attribute("package").data as String
     }
@@ -41,7 +41,7 @@ fun mergeManifest(path: String, mainPath: String, outPath: String = mainPath) {
         return
     }
     val saxReader = SAXReader()
-    val read = saxReader.read(path)
+    val read = saxReader.readSafe(path)
     val rootElement = read.rootElement
 
 
@@ -112,7 +112,7 @@ fun manifestDeleteName(manifestPath: String, deleteNames: Set<String>) {
     }
     tryCatch {
         val saxReader = SAXReader()
-        val read = saxReader.read(manifestPath)
+        val read = saxReader.readSafe(manifestPath)
         val rootElement = read.rootElement
         deleteChildElement(rootElement, deleteNames)
         tryCatch(false) {
@@ -163,7 +163,7 @@ fun mergeSafeManifest(
     }
     tryCatch {
         val saxReader = SAXReader()
-        val read = saxReader.read(path)
+        val read = saxReader.readSafe(path)
         val rootElement = read.rootElement
         val packge = rootElement.attribute("package").data as String
         val saxReader2 = SAXReader()
@@ -314,7 +314,7 @@ fun preMergeManifestSetLauncherActivity(path: String, mainPath: String) {
 private fun findAndDeleteLauncherActivity(path: String): String {
     var activityName = ""
     val saxReader = SAXReader()
-    val read = saxReader.read(path)
+    val read = saxReader.readSafe(path)
     val rootElement = read.rootElement
     val data = rootElement.attribute("package").data
     rootElement.elements().forEach aaa@{
@@ -395,7 +395,7 @@ private fun hasReplaceLauncherActivity(path: String): Boolean {
         return false
     }
     val saxReader = SAXReader()
-    val read = saxReader.read(path)
+    val read = saxReader.readSafe(path)
     val rootElement = read.rootElement
     rootElement.elements().forEach aaa@{
         if (it.name.equals("application")) {
@@ -419,7 +419,7 @@ private fun hasReplaceLauncherActivity(path: String): Boolean {
 private fun setReplaceLauncherActivity(path: String, activityName: String): Boolean {
     var hasReplaceLauncherActivity = false
     val saxReader = SAXReader()
-    val read = saxReader.read(path)
+    val read = saxReader.readSafe(path)
     val rootElement = read.rootElement
     var data = rootElement.attribute("package").data
     rootElement.elements().forEach {
