@@ -25,7 +25,7 @@ class ApkConfig {
     var changeClassPackage:Map<OldName,NewName> = emptyMap() // 修改class所在的包名  com.xxx.yyy 中间用.隔开
     var renameResMap:Map<ResType,Map<OldName,NewName>> = emptyMap() // Map<type,Map<oldName,newName>>
     var smaliClassSizeMB:Long=0   //限制smaliClass文件的大小,避免方法数量超出限制无法打包,推荐值50MB， 若smaliClassSizeMB<=0或smaliClassSizeMB>=1000将不限制文件大小
-    var deleteSmaliPaths: List<String> =emptyList() //需要删除的smail的文件   aa/bb   aa/cc.smali
+    var deleteSmaliPaths: List<String> =emptyList() //需要删除的smail的文件   com/google   com/xxx/R.smali
     var isDeleteSameNameSmali: Boolean=true  //是否删除相同名称的smali文件
     var deleteManifestNodeNames: Set<String> =emptySet() //根据name删除的AndroidManifest.xml对应的节点
 }

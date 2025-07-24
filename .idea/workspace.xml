@@ -9,25 +9,11 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4eaafb40-8131-4eac-be98-0f0811b2834e" name="Changes" comment="feat(toolbox): 添加 AAR 文件合并功能&#10;&#10;- 新增 AarConfig 类用于配置 AAR 文件合并参数&#10;- 实现 AAR 文件合并的核心逻辑和相关工具函数- 添加命令行参数支持 AAR 文件合并功能&#10;- 优化现有代码结构，提高可维护性和可扩展性">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/aar/MydeclareXml.kt" afterDir="false" />
+    <list default="true" id="4eaafb40-8131-4eac-be98-0f0811b2834e" name="Changes" comment="feat(aar): 实现 apk转 aar 功能&#10;&#10;- 新增 AarToSmali.kt 文件，实现 AAR 文件到 Smali 代码的转换&#10;- 更新 ApkToAarRun.kt 文件，整合 Smali转换流程&#10;- 修改 CommandArgs.java，增加相关命令行参数- 更新 FileUtils.java，添加文件追加写入方法">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/CommandArgs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/CommandArgs.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/ReplaceAPk.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/ReplaceAPk.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/run/AArMergeRun.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/run/AArMergeRun.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/run/ApkToAarRun.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/run/ApkToAarRun.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/run/TestRun.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/run/TestRun.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/aar/AArRes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/aar/AArRes.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/aar/AarToSmali.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/aar/AarToSmali.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/AndroidManifestUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/AndroidManifestUtil.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/CopyFile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/CopyFile.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/MergeApkRename.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/MergeApkRename.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/PublicXml.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/PublicXml.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/SmaliUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/SmaliUtil.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/Smali_ClassesUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/Smali_ClassesUtil.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/XmlUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/XmlUtil.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/replacePackage/FileUtils.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/replacePackage/FileUtils.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/replacePackage/FindRes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/replacePackage/FindRes.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/bean/AarConfig.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/bean/AarConfig.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/bean/ApkConfig.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/bean/ApkConfig.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -323,7 +309,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753163718287</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="feat(aar): 实现 apk转 aar 功能&#10;&#10;- 新增 AarToSmali.kt 文件，实现 AAR 文件到 Smali 代码的转换&#10;- 更新 ApkToAarRun.kt 文件，整合 Smali转换流程&#10;- 修改 CommandArgs.java，增加相关命令行参数- 更新 FileUtils.java，添加文件追加写入方法">
+      <option name="closed" value="true" />
+      <created>1753324844529</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1753324844529</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -367,6 +361,7 @@
     <MESSAGE value="refactor(gameSdkTool): 重构配置文件解析和渠道包生成逻辑&#10;&#10;- 优化 ApkConfigBean、ChannelConfigBean 和 SignConfigBean 的解析逻辑&#10;- 改进 ChannelApkBuild 中的渠道包生成流程&#10;- 统一异常处理，提高代码健壮性- 调整代码格式，提升可读性" />
     <MESSAGE value="1" />
     <MESSAGE value="feat(toolbox): 添加 AAR 文件合并功能&#10;&#10;- 新增 AarConfig 类用于配置 AAR 文件合并参数&#10;- 实现 AAR 文件合并的核心逻辑和相关工具函数- 添加命令行参数支持 AAR 文件合并功能&#10;- 优化现有代码结构，提高可维护性和可扩展性" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat(toolbox): 添加 AAR 文件合并功能&#10;&#10;- 新增 AarConfig 类用于配置 AAR 文件合并参数&#10;- 实现 AAR 文件合并的核心逻辑和相关工具函数- 添加命令行参数支持 AAR 文件合并功能&#10;- 优化现有代码结构，提高可维护性和可扩展性" />
+    <MESSAGE value="feat(aar): 实现 apk转 aar 功能&#10;&#10;- 新增 AarToSmali.kt 文件，实现 AAR 文件到 Smali 代码的转换&#10;- 更新 ApkToAarRun.kt 文件，整合 Smali转换流程&#10;- 修改 CommandArgs.java，增加相关命令行参数- 更新 FileUtils.java，添加文件追加写入方法" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(aar): 实现 apk转 aar 功能&#10;&#10;- 新增 AarToSmali.kt 文件，实现 AAR 文件到 Smali 代码的转换&#10;- 更新 ApkToAarRun.kt 文件，整合 Smali转换流程&#10;- 修改 CommandArgs.java，增加相关命令行参数- 更新 FileUtils.java，添加文件追加写入方法" />
   </component>
 </project>

@@ -2,6 +2,7 @@
 ## 使用
 通过使用gui界面来操作[apkMerge_gui](https://github.com/ming123aaa/apkMerge_gui)
 
+[aarMergeTool](https://github.com/ming123aaa/aarMergeTool) :支持aar合并,apk2aar
 ## 如何编译成可运行的jar
 ### 1.设置 Artifacts
 打开idea  
