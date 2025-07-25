@@ -3,9 +3,7 @@ package com.oh.gameSdkTool.bean
 import com.google.gson.Gson
 import com.oh.gameSdkTool.CommandArgs
 import com.ohuang.replacePackage.FileUtils
-import com.sun.org.apache.bcel.internal.generic.NEW
 import java.io.File
-import java.util.*
 
 /**
  * apk 配置

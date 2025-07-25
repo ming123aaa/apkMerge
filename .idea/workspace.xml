@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ArtifactsWorkspaceSettings">
     <artifacts-to-build>
-      <artifact name="gameSdkTool.main:jar" />
+      <artifact name="gameSdkTool" />
     </artifacts-to-build>
   </component>
   <component name="AutoImportSettings">
@@ -10,22 +10,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4eaafb40-8131-4eac-be98-0f0811b2834e" name="Changes" comment="feat(aar): 实现 apk转 aar 功能&#10;&#10;- 新增 AarToSmali.kt 文件，实现 AAR 文件到 Smali 代码的转换&#10;- 更新 ApkToAarRun.kt 文件，整合 Smali转换流程&#10;- 修改 CommandArgs.java，增加相关命令行参数- 更新 FileUtils.java，添加文件追加写入方法">
+      <change beforePath="$PROJECT_DIR$/.idea/artifacts/gameSdkTool_main_jar.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/artifacts/gameSdkTool_main_jar.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/Jar2Dex.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/Jar2Dex.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/ReplaceAPk.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/ReplaceAPk.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/bean/AarConfig.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/bean/AarConfig.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/bean/ApkConfig.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/bean/ApkConfig.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/Decompile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/Decompile.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/bean/ApkConfigBean.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/bean/ApkConfigBean.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/run/TestRun.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/run/TestRun.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/aar/AarToSmali.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/aar/AarToSmali.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/RenameRes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/RenameRes.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/SmaliUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/SmaliUtil.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/Smali_ClassesUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/Smali_ClassesUtil.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/aar/MydeclareXml.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/aar/MydeclareXml.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ClangdSettings">
+    <option name="formatViaClangd" value="false" />
   </component>
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
@@ -44,6 +43,57 @@
               <path>
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="gameSdkTool" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="gameSdkTool" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="gameSdkTool" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="gameSdkTool" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build setup" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="gameSdkTool" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="documentation" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="gameSdkTool" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="help" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="gameSdkTool" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="other" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="gameSdkTool" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="verification" type="c8890929:TasksNode$1" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="gameSdkTool" type="f1a62948:ProjectNode" />
+                <item name="Dependencies" type="6de06a37:ExternalSystemViewDefaultContributor$MyDependenciesNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="gameSdkTool" type="f1a62948:ProjectNode" />
+                <item name="Run Configurations" type="7b0102dc:RunConfigurationsNode" />
               </path>
             </expand>
             <select />
@@ -71,12 +121,12 @@
     <option name="RESET_MODE" value="MIXED" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="jar://D:/Users/ali213/.gradle/caches/modules-2/files-2.1/org.dom4j/dom4j/2.1.3/a75914155a9f5808963170ec20653668a2ffd2fd/dom4j-2.1.3.jar!/org/dom4j/io/DispatchHandler.class" root0="SKIP_INSPECTION" />
-    <setting file="jar://D:/Users/ali213/.gradle/caches/modules-2/files-2.1/org.dom4j/dom4j/2.1.3/a75914155a9f5808963170ec20653668a2ffd2fd/dom4j-2.1.3.jar!/org/dom4j/io/SAXReader.class" root0="SKIP_INSPECTION" />
-    <setting file="jar://D:/Users/ali213/.gradle/caches/modules-2/files-2.1/org.dom4j/dom4j/2.1.3/a75914155a9f5808963170ec20653668a2ffd2fd/dom4j-2.1.3.jar!/org/dom4j/io/XMLWriter.class" root0="SKIP_INSPECTION" />
-    <setting file="jar://D:/Users/ali213/.jdks/jdk1.8.0_341/src.zip!/java/io/FileWriter.java" root0="SKIP_INSPECTION" />
-    <setting file="jar://D:/Users/ali213/.jdks/jdk1.8.0_341/src.zip!/java/lang/Process.java" root0="SKIP_INSPECTION" />
-    <setting file="jar://D:/Users/ali213/.jdks/jdk1.8.0_341/src.zip!/org/xml/sax/InputSource.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$PROJECT_DIR$/../../../Users/ali213/.gradle/caches/modules-2/files-2.1/org.dom4j/dom4j/2.1.3/a75914155a9f5808963170ec20653668a2ffd2fd/dom4j-2.1.3.jar!/org/dom4j/io/DispatchHandler.class" root0="SKIP_INSPECTION" />
+    <setting file="jar://$PROJECT_DIR$/../../../Users/ali213/.gradle/caches/modules-2/files-2.1/org.dom4j/dom4j/2.1.3/a75914155a9f5808963170ec20653668a2ffd2fd/dom4j-2.1.3.jar!/org/dom4j/io/SAXReader.class" root0="SKIP_INSPECTION" />
+    <setting file="jar://$PROJECT_DIR$/../../../Users/ali213/.gradle/caches/modules-2/files-2.1/org.dom4j/dom4j/2.1.3/a75914155a9f5808963170ec20653668a2ffd2fd/dom4j-2.1.3.jar!/org/dom4j/io/XMLWriter.class" root0="SKIP_INSPECTION" />
+    <setting file="jar://$PROJECT_DIR$/../../../Users/ali213/.jdks/jdk1.8.0_341/src.zip!/java/io/FileWriter.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$PROJECT_DIR$/../../../Users/ali213/.jdks/jdk1.8.0_341/src.zip!/java/lang/Process.java" root0="SKIP_INSPECTION" />
+    <setting file="jar://$PROJECT_DIR$/../../../Users/ali213/.jdks/jdk1.8.0_341/src.zip!/org/xml/sax/InputSource.java" root0="SKIP_INSPECTION" />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -86,32 +136,38 @@
   &quot;associatedIndex&quot;: 3
 }</component>
   <component name="ProjectId" id="2Yvkjwk9wPVD1L7IPvhIBNreoPb" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Gradle.Build gameSdkTool.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TestCode.test mergeYml.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;1.8&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/kmpProject/KotlinProject&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;show.do.not.copy.http.proxy.settings.to.gradle&quot;: &quot;false&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.Build gameSdkTool.executor": "Run",
+    "Gradle.TestCode.test mergeYml.executor": "Run",
+    "Gradle.TestCode.test moveFile.executor": "Run",
+    "Gradle.apkMerge [assemble].executor": "Run",
+    "Gradle.apkMerge [init].executor": "Run",
+    "Gradle.apkMerge [wrapper].executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "jdk.selected.JAVA_MODULE": "1.8",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "D:/project/kotlin/apkMerge",
+    "project.structure.last.edited": "Artifacts",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "show.do.not.copy.http.proxy.settings.to.gradle": "false"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\ideaProject\gameSdkTool\gameSdkTool\tools\jar" />
@@ -132,31 +188,7 @@
       <recent name="com.ohuang.apkMerge" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.TestCode.test mergeYml">
-    <configuration name="TestCode.test findSmaliCodeIdFirst" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
-      <ExternalSystemSettings>
-        <option name="executionName" />
-        <option name="externalProjectPath" value="$PROJECT_DIR$" />
-        <option name="externalSystemIdString" value="GRADLE" />
-        <option name="scriptParameters" value="" />
-        <option name="taskDescriptions">
-          <list />
-        </option>
-        <option name="taskNames">
-          <list>
-            <option value=":test" />
-            <option value="--tests" />
-            <option value="&quot;TestCode.test findSmaliCodeIdFirst&quot;" />
-          </list>
-        </option>
-        <option name="vmOptions" />
-      </ExternalSystemSettings>
-      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
-      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
-      <DebugAllEnabled>false</DebugAllEnabled>
-      <RunAsTest>true</RunAsTest>
-      <method v="2" />
-    </configuration>
+  <component name="RunManager" selected="Gradle.apkMerge [init]">
     <configuration name="TestCode.test mergeYml" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -181,7 +213,7 @@
       <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="TestCode.test preMergeManifestSetLauncherActivity" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="TestCode.test moveFile" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -194,7 +226,7 @@
           <list>
             <option value=":test" />
             <option value="--tests" />
-            <option value="&quot;TestCode.test preMergeManifestSetLauncherActivity&quot;" />
+            <option value="&quot;TestCode.test moveFile&quot;" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -205,7 +237,7 @@
       <RunAsTest>true</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="gameSdkTool [dependencies]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="apkMerge [assemble]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -216,7 +248,7 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="dependencies" />
+            <option value="assemble" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -227,7 +259,7 @@
       <RunAsTest>false</RunAsTest>
       <method v="2" />
     </configuration>
-    <configuration name="gameSdkTool [jar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+    <configuration name="apkMerge [init]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
@@ -238,7 +270,29 @@
         </option>
         <option name="taskNames">
           <list>
-            <option value="jar" />
+            <option value="init" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <RunAsTest>false</RunAsTest>
+      <method v="2" />
+    </configuration>
+    <configuration name="apkMerge [wrapper]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="wrapper" />
           </list>
         </option>
         <option name="vmOptions" />
@@ -251,11 +305,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.apkMerge [init]" />
+        <item itemvalue="Gradle.apkMerge [wrapper]" />
+        <item itemvalue="Gradle.apkMerge [assemble]" />
+        <item itemvalue="Gradle.TestCode.test moveFile" />
         <item itemvalue="Gradle.TestCode.test mergeYml" />
-        <item itemvalue="Gradle.TestCode.test findSmaliCodeIdFirst" />
-        <item itemvalue="Gradle.TestCode.test preMergeManifestSetLauncherActivity" />
-        <item itemvalue="Gradle.gameSdkTool [jar]" />
-        <item itemvalue="Gradle.gameSdkTool [dependencies]" />
       </list>
     </recent_temporary>
   </component>

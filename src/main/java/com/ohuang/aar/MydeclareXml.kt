@@ -1,7 +1,6 @@
 package com.ohuang.aar
 
 import com.ohuang.replacePackage.FileUtils
-import javafx.scene.Parent
 import java.io.File
 
 const val declareXml = "/res/values/z_my_declare.xml"

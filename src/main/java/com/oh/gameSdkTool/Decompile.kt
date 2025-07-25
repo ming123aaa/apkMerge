@@ -4,10 +4,11 @@ import com.oh.gameSdkTool.bean.SignConfigBean
 import com.oh.gameSdkTool.bean.toSignConfigBean
 import com.oh.gameSdkTool.config.GlobalConfig
 import com.oh.gameSdkTool.config.LibConfig
-import com.ohuang.apkMerge.copyPathAllFile
+
 import com.ohuang.replacePackage.ExecUtil
 import com.ohuang.replacePackage.FileUtils
 import com.ohuang.replacePackage.ZipUtil
+import com.ohuang.replacePackage.copyPathAllFile
 import java.io.File
 
 object Decompile {
