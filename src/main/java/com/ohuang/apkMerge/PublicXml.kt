@@ -3,6 +3,7 @@ package com.ohuang.apkMerge
 import com.oh.gameSdkTool.bean.NewName
 import com.oh.gameSdkTool.bean.OldName
 import com.oh.gameSdkTool.bean.ResType
+import com.ohuang.replacePackage.copyFile
 import org.dom4j.io.SAXReader
 import java.io.File
 import java.util.TreeMap

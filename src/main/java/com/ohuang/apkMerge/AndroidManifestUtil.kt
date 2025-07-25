@@ -1,6 +1,7 @@
 package com.ohuang.apkMerge
 
 import com.oh.gameSdkTool.config.GlobalConfig
+import com.ohuang.replacePackage.copyFile
 import org.dom4j.Attribute
 import org.dom4j.Element
 import org.dom4j.io.SAXReader

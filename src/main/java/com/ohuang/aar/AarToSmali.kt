@@ -5,6 +5,7 @@ import com.oh.gameSdkTool.Jar2Dex
 import com.ohuang.apkMerge.*
 import com.ohuang.replacePackage.FileUtils
 import com.ohuang.replacePackage.changTextLine
+import com.ohuang.replacePackage.copyPathAllFile
 import java.io.File
 import java.net.URL
 import java.net.URLClassLoader

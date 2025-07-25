@@ -1,6 +1,7 @@
 package com.ohuang.apkMerge
 
 
+import com.ohuang.replacePackage.copyPathAllFile
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
@@ -319,20 +320,7 @@ private fun updateNotRSmali(
 }
 
 
-/**
- * 修改public.xml 后更新R.smali
- */
-fun updateRSmali2(public: String, oldPublic: String = "", path: String) {
-    var file = File(path)
-    val data = ArrayList<String>()
 
-    if (file.isDirectory) {
-        searchFileInPath(file.absolutePath, "R.smali", data)
-    } else if ("R.smali" == file.name) {
-        data.add(file.absolutePath)
-    }
-    updateRSmaliId(public = public, oldPublic = oldPublic, smaliList = data, isChangeNotRSmali = false)
-}
 
 fun findSmaliClassesDir(path: String): MutableList<String> {
     return findSmaliClassesDirSort(path).toMutableList()

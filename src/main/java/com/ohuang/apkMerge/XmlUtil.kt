@@ -2,6 +2,7 @@ package com.ohuang.apkMerge
 
 import com.oh.gameSdkTool.bean.NewName
 import com.oh.gameSdkTool.bean.OldName
+import com.ohuang.replacePackage.copyFile
 import org.dom4j.Document
 import org.dom4j.io.OutputFormat
 import org.dom4j.io.SAXReader

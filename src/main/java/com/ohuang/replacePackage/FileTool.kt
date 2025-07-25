@@ -65,12 +65,13 @@ fun moveFile(oldPath: String, newPath: String) {
             Files.delete(old)
         }
 
-    } catch (e: AccessDeniedException) {
-        println("权限不足: ${e.message}")
-    } catch (e: FileAlreadyExistsException) {
-        println("目标文件已存在且无法替换: ${e.message}")
-    } catch (e: IOException) {
-        println("IO 错误: ${e.message}")
+    } catch (e: Exception) {
+        copyAndDelFile(oldPath, newPath)
     }
+}
+
+fun copyAndDelFile(oldPath: String, newPath: String,isCover:Boolean=true){
+    copyFile(oldPath,newPath,isCover)
+    FileUtils.delete(File(oldPath))
 }
 
