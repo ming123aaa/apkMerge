@@ -6,8 +6,6 @@ import java.io.FileReader
 import java.io.FileWriter
 import java.lang.StringBuilder
 import java.util.LinkedList
-import java.util.TreeMap
-import java.util.TreeSet
 
 
 /**
@@ -337,16 +335,7 @@ fun updateRSmali2(public: String, oldPublic: String = "", path: String) {
 }
 
 fun findSmaliClassesDir(path: String): MutableList<String> {
-    val file1 = File(path)
-    val mutableList = arrayListOf<String>()
-    file1.listFiles()?.forEach {
-        if (it.isDirectory) {
-            if (it.name.startsWith("smali_classes") || it.name == "smali") {
-                mutableList.add(it.absolutePath)
-            }
-        }
-    }
-    return mutableList
+    return findSmaliClassesDirSort(path).toMutableList()
 }
 
 /**
@@ -367,9 +356,10 @@ fun copySmaliClass(path: String, outPath: String): List<String> {
     val data = arrayListOf<String>()
     oldList.forEach{
         val file = File(it)
-        var smailDir = getSmailDir(outPath, number)
+        var smailDir = getSmailDirForNum(outPath, number)
         copyPathAllFile(file.absolutePath, smailDir)
         data.add(smailDir)
+        number+=1
     }
     return data
 }

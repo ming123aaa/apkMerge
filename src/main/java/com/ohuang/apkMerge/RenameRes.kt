@@ -5,6 +5,7 @@ import com.oh.gameSdkTool.bean.OldName
 import com.oh.gameSdkTool.bean.ResType
 import com.ohuang.replacePackage.changTextLine
 import java.io.File
+import java.util.regex.Matcher
 import java.util.regex.Pattern
 
 
@@ -82,7 +83,7 @@ fun replaceRefSmail(text: String, replace: Map<ResType, Map<OldName, NewName>>, 
 
         // 如果找到对应的替换规则，则替换；否则保留原内容
         val newName = replacementMap?.get(oldName) ?: oldName
-        val replacement = "R\\$${resTypeStr};->$newName:"
+        val replacement = Matcher.quoteReplacement("R$${resTypeStr};->$newName:")
         try {
             matcher.appendReplacement(sb, replacement)
         }catch (e: Exception){
@@ -120,8 +121,10 @@ private fun renameXmlRef(rootPath: String, renameResMap: Map<ResType, Map<OldNam
 
 
 private fun replaceXmlRef(xmlPath: String, renameResMap: Map<ResType, Map<OldName, NewName>>, xmlPattern: Pattern) {
-    changTextLine(xmlPath) {
-        return@changTextLine replaceRef(it, renameResMap, xmlPattern = xmlPattern)
+    changTextLine(xmlPath) {string->
+        return@changTextLine runCatching{replaceRef(string, renameResMap, xmlPattern = xmlPattern)}.onFailure({
+            println("replaceXmlRef  error: xmlPath=$xmlPath content=$string error=$it")
+        }).getOrNull()?:string
     }
 }
 private fun getXmlPattern(renameResMap: Map<ResType, Map<OldName, NewName>>):Pattern{
@@ -146,8 +149,9 @@ fun replaceRef(text: String, replace: Map<ResType, Map<OldName, NewName>>, xmlPa
         val replacementMap = replace[resType]
 
         // 如果找到对应的替换规则，则替换；否则保留原内容
-        val newName = replacementMap?.get(oldName) ?: oldName
-        val replacement = "@$resTypeStr/$newName"
+        val newName = (replacementMap?.get(oldName) ?: oldName)
+
+        val replacement =Matcher.quoteReplacement("@$resTypeStr/$newName")
         matcher.appendReplacement(sb, replacement)
     }
     matcher.appendTail(sb)
@@ -174,7 +178,10 @@ fun valueRename(valuePath: String, renameResMap: Map<ResType, Map<OldName, NewNa
     File(valuePath).listFiles()?.forEach {
         if (it.isFile && it.name.endsWith(".xml") && !it.name.startsWith("public")) {
             var nameWithoutExtension = it.nameWithoutExtension
-            if (nameWithoutExtension.endsWith("s")) {
+            if (renameResMap.containsKey(nameWithoutExtension)) {
+                xmlReplaceName(it.absolutePath, renameResMap[nameWithoutExtension]!!)
+            }
+            if (nameWithoutExtension.endsWith("s")) {//有些文件名是type+后缀s
                 nameWithoutExtension = nameWithoutExtension.substring(0, nameWithoutExtension.length - 1)
             }
             if (renameResMap.containsKey(nameWithoutExtension)) {

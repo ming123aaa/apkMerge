@@ -25,7 +25,7 @@ data class ApkConfigBean(
     var deleteFileList: List<String>, //相对路径
     var changeClassPackage: Map<OldName, NewName>,
     var renameResMap: Map<ResType, Map<OldName, NewName>>,
-    var smaliClassSizeMB: Long,
+
 
     var deleteSmaliPaths: List<String>, //需要删除的smail的文件   /aa/bb   /aa/cc.smali
     var isDeleteSameNameSmali: Boolean, //是否删除相同名称的smali文件
@@ -72,7 +72,6 @@ fun getApkConfigBean(apkConfigPath: String): ApkConfigBean {
         deleteFileList = fromJson.deleteFileList,
         changeClassPackage = fromJson.changeClassPackage,
         renameResMap = fromJson.renameResMap,
-        smaliClassSizeMB = fromJson.smaliClassSizeMB,
         deleteSmaliPaths = fromJson.deleteSmaliPaths,
         isDeleteSameNameSmali = fromJson.isDeleteSameNameSmali,
         deleteManifestNodeNames = fromJson.deleteManifestNodeNames

@@ -2,16 +2,27 @@ package com.oh.gameSdkTool
 
 import com.oh.gameSdkTool.config.GlobalConfig
 import com.oh.gameSdkTool.config.LibConfig
+import com.ohuang.apkMerge.findDexFile
+import com.ohuang.apkMerge.getNewSmailDir
 import com.ohuang.replacePackage.ExecUtil
 import com.ohuang.replacePackage.FileUtils
 import java.io.File
 
 object Jar2Dex {
 
-
-    fun jar2dex(commandArgs: CommandArgs, jarPath: String, outPath: String) {
+    /**
+     *  jar 转  dex
+     *
+     *  返回 文件dex列表
+     */
+    fun jar2dex(commandArgs: CommandArgs, jarPath: String, outDirPath: String): List<String> {
         println("jar2dex")
-        d8Jar2Dex(LibConfig.buildTools(commandArgs), jarPath, outPath)
+        if (!File(outDirPath).exists()){
+            File(outDirPath).mkdirs()
+        }
+
+        var d8Jar2Dex = d8Jar2Dex(LibConfig.buildTools(commandArgs), jarPath, outDirPath)
+        return d8Jar2Dex
 //        jar2dex(LibConfig.dexToolDir(commandArgs), jarPath, outPath)
     }
 
@@ -26,13 +37,21 @@ object Jar2Dex {
         smali2DexUseBaksmali(LibConfig.getJava(commandArgs), LibConfig.smaliJar(commandArgs), smaliPath, outPath)
     }
 
-    fun jar2smail(commandArgs: CommandArgs, jarPath: String, outPath: String) {
+
+    fun jar2smail(commandArgs: CommandArgs, jarPath: String, dirOutPath: String): List<String> {
         println("jar2smail")
-        var file = File(outPath)
-        var dexTemp = file.absolutePath + "_dexTemp.dex"
-        jar2dex(commandArgs, jarPath, dexTemp)
-        dex2smail(commandArgs, dexTemp, outPath)
+        var file = File(dirOutPath)
+        var dexTemp = file.absolutePath + "/jar2smail_dexTemp"
+        var jar2dex = jar2dex(commandArgs, jarPath, dexTemp)
+        var smaliFiles= ArrayList<String>()
+        jar2dex.forEachIndexed({ index, s ->
+            var nextSmailDir = getNewSmailDir(dirOutPath)
+            dex2smail(commandArgs, s, nextSmailDir)
+            smaliFiles.add(nextSmailDir)
+        })
+
         FileUtils.delete(File(dexTemp))
+        return smaliFiles
     }
 
     fun smali2jar(commandArgs: CommandArgs, smaliPath: String, outPath: String) {
@@ -96,19 +115,14 @@ object Jar2Dex {
         ExecUtil.exec(arrayOf, 60 * 30, GlobalConfig.isLog)
     }
 
-    private fun d8Jar2Dex(buildTools: String, jarPath: String, outPath: String) {
+    private fun d8Jar2Dex(buildTools: String, jarPath: String, outDirPath: String): List<String> {
         val exe = "$buildTools/d8.bat"
-        var parent: File = File(outPath).parentFile
-        var dexClass = "${parent.absolutePath}/classes.dex"
-        val cmd = "\"$exe\" --output \"${parent.absolutePath}\" \"$jarPath\""
+        var outDir: File = File(outDirPath)
+
+        val cmd = "\"$exe\" --output \"${outDir.absolutePath}\" --min-api 21 \"$jarPath\""
         var arrayOf = arrayOf(cmd)
         println(arrayOf.joinToString(" "))
         ExecUtil.exec(arrayOf, 60 * 30, GlobalConfig.isLog, GlobalConfig.isLog)
-        if (File(dexClass).exists()) {
-            println("$dexClass -> $outPath")
-            File(dexClass).renameTo(File(outPath))
-        } else {
-            println("$dexClass not exists")
-        }
+       return findDexFile(outDir.absolutePath)
     }
 }

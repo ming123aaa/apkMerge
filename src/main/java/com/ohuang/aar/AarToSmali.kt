@@ -2,34 +2,26 @@ package com.ohuang.aar
 
 import com.oh.gameSdkTool.CommandArgs
 import com.oh.gameSdkTool.Jar2Dex
-import com.ohuang.apkMerge.NumUtil
-import com.ohuang.apkMerge.PublicXmlNode
-import com.ohuang.apkMerge.copyPathAllFile
-import com.ohuang.apkMerge.findSmaliClassesDirSort
-import com.ohuang.apkMerge.findSmaliClassesDir
-import com.ohuang.apkMerge.findSmaliCodeIdFirst
-import com.ohuang.apkMerge.forEachAllFile
-
-import com.ohuang.apkMerge.mergeXml
-import com.ohuang.apkMerge.path2Package
-import com.ohuang.apkMerge.readPublic
-import com.ohuang.apkMerge.readPublicToIdNode
-import com.ohuang.apkMerge.tryCatch
+import com.ohuang.apkMerge.*
 import com.ohuang.replacePackage.FileUtils
 import com.ohuang.replacePackage.changTextLine
 import java.io.File
+import java.net.URL
 import java.net.URLClassLoader
-import java.util.TreeMap
+import java.util.*
 
 
 fun copyToAArSmali(oldSmali: String, aarSmaliPath: String) {
-    val list = setOf<String>("assets", "kotlin", "META-INF", "AndroidManifest.xml", "res", "lib", "libs", "jni", "aidl")
+    val list = setOf<String>("assets", "kotlin", "META-INF", "AndroidManifest.xml", "res", "jni", "aidl")
     File(oldSmali).listFiles()?.forEach {
         if (list.contains(it.name)) {
             copyPathAllFile(it.absolutePath, aarSmaliPath + "/" + it.name)
         }
         if (it.isDirectory && it.name == "unknown") {
             copyPathAllFile(it.absolutePath, aarSmaliPath)
+        }
+        if (it.isDirectory && it.name == "lib") {
+            copyPathAllFile(it.absolutePath, "$aarSmaliPath/jni")
         }
         if (it.isDirectory && it.name.startsWith("smali")) {
             copyPathAllFile(it.absolutePath, aarSmaliPath + "/" + it.name)
@@ -45,23 +37,23 @@ fun setAarSmali(commandArgs: CommandArgs, baseSmali: String, packageName: String
 
     changeRSmaliAndRTxt(packageName, baseSmali, buildRJarDir, commandArgs)
     writeAar_metadata(baseSmali)
-    if (commandArgs.isChangeNotRSmali){
+    if (commandArgs.isChangeNotRSmali) {
         val readPublicToIdNode = readPublicToIdNode(baseSmali + publicXml)
-        makeIdUseRClass(baseSmali,packageName,readPublicToIdNode)
+        makeIdUseRClass(baseSmali, packageName, readPublicToIdNode) //将0x7f改成使用R.class
     }
     FileUtils.delete(File(baseSmali + publicXml))
     buildValueXml(baseSmali)
 }
 
-private fun makeIdUseRClass(baseSmali: String,packageName: String,map:Map<String,PublicXmlNode>) {
-    var newPackageName=packageName.replace(".","/")
+private fun makeIdUseRClass(baseSmali: String, packageName: String, map: Map<String, PublicXmlNode>) {
+    var newPackageName = packageName.replace(".", "/")
     var findSmaliClassesDirSort = findSmaliClassesDirSort(baseSmali)
     findSmaliClassesDirSort.forEach { dir ->
 
-        forEachAllFile(File(dir)){
-            if (it.isFile&&it.name.endsWith(".smali")){
+        forEachAllFile(File(dir)) {
+            if (it.isFile && it.name.endsWith(".smali")) {
                 changTextLine(it.absolutePath) { string ->
-                    changeIdSmaliLine(string,newPackageName,map)
+                    changeIdSmaliLine(string, newPackageName, map)
                 }
             }
             false
@@ -69,16 +61,16 @@ private fun makeIdUseRClass(baseSmali: String,packageName: String,map:Map<String
     }
 }
 
-private fun changeIdSmaliLine(string: String,packageName:String,map:Map<String,PublicXmlNode>): String{
+private fun changeIdSmaliLine(string: String, packageName: String, map: Map<String, PublicXmlNode>): String {
     val findSmaliCodeIdFirst = findSmaliCodeIdFirst(string)
     if (findSmaliCodeIdFirst != null) {
         val oldId = findSmaliCodeIdFirst
-        if (map.contains(oldId)&&string.contains("const")){
+        if (map.contains(oldId) && string.contains("const")) {
             var node = map[oldId]
-            if (node!=null) {
+            if (node != null) {
                 var getRSmaliCode = "L${packageName}/R\$${node.type};->${node.name}:I"
                 val newValue = string.replace("const/high16", "const").replace("const/16", "const")
-                return newValue.replace("const", "sget").replace(oldId,getRSmaliCode)
+                return newValue.replace("const", "sget").replace(oldId, getRSmaliCode)
             }
         }
     }
@@ -139,6 +131,10 @@ private fun changeRTxtUsePublicXml(baseSmali: String) {
     FileUtils.delete(File(baseSmali + publicXml))
 }
 
+/**
+ * 将引用修改成 packageName.R.class
+ * 生成R.txt
+ */
 private fun changeRSmaliAndRTxt(
     packageName: String,
     baseSmali: String,
@@ -151,7 +147,7 @@ private fun changeRSmaliAndRTxt(
     }
     var findSmaliClassesDirSort = findSmaliClassesDirSort(baseSmali)
     var TempDirFile = File("$buildRJarDir/RSmaliTemp")
-    var RSmaliJar = File("$buildRJarDir/RSmaliTemp/RSmali.Jar")
+
     var RSmaliTempFile = File("$buildRJarDir/RSmaliTemp/smali")
     var typeMapClass = TreeMap<String, HashSet<String>>()
     var styleableClass = HashSet<String>()
@@ -180,13 +176,25 @@ private fun changeRSmaliAndRTxt(
         }
     }
     RSmaliChangePackage(baseSmali, oldPackages, packageName1) //修改
-    Jar2Dex.smali2jar(commandArgs, RSmaliTempFile.absolutePath, RSmaliJar.absolutePath)//构建jar
+    limitDex_smali_class_Dir(TempDirFile.absolutePath)
 
-    if (RSmaliJar.isFile && RSmaliJar.exists()) {
-        var urlClassLoader = URLClassLoader(arrayOf(RSmaliJar.toURI().toURL()), System::class.java.classLoader) //加载jar
-        appendRTxtNormal(urlClassLoader, baseSmali, typeMapClass)  //通过classLoder获取R.class的值添加到R.txt中
-        appendRTxtStyleable(urlClassLoader, baseSmali, styleableClass) //通过classLoder获取R$styleable.class的值添加到R.txt中
+    var RSmaliJarList = ArrayList<File>()
+    findSmaliClassesDirSort(TempDirFile.absolutePath).forEachIndexed { index, path ->
+        var rSmaliJar = File("$buildRJarDir/RSmaliJar$index.jar")
+        Jar2Dex.smali2jar(commandArgs, path, rSmaliJar.absolutePath)//构建jar
+        RSmaliJarList.add(rSmaliJar)
     }
+
+    var jarUrls= ArrayList<URL>()
+    RSmaliJarList.forEach { RSmaliJar ->
+        if (RSmaliJar.isFile && RSmaliJar.exists()) {
+            jarUrls.add(RSmaliJar.toURI().toURL())
+        }
+    }
+    var urlClassLoader =
+        URLClassLoader(jarUrls.toTypedArray(), System::class.java.classLoader) //加载jar
+    appendRTxtNormal(urlClassLoader, baseSmali, typeMapClass)  //通过classLoder获取R.class的值添加到R.txt中
+    appendRTxtStyleable(urlClassLoader, baseSmali, styleableClass) //通过classLoder获取R$styleable.class的值添加到R.txt中
 
 }
 
@@ -209,7 +217,7 @@ private fun appendRTxtNormal(
         intMap.forEach { name, id ->
             if (id.shr(24) == 0x01) {
                 stringBuilder.append("\n").append("int $type $name ${NumUtil.int2ox(id)}")
-            }else {
+            } else {
                 stringBuilder.append("\n").append("int $type $name 0x0")
             }
         }
@@ -258,6 +266,20 @@ private fun appendRTxtStyleable(classLoader: ClassLoader, baseSmali: String, sty
     buildDeclareXml(baseSmali + declareXml, styleableItemMap)
 }
 
+/**
+ *
+ * parents
+ *  xxx
+ *  xxx_Layout
+ *
+ *  childNames
+ *  xxx_aaa
+ *  xxx_ccc_aaa
+ *  xxx_Layout_aaa
+ *
+ * @return (parent=xxx,realChildName=aaa)=ture   (parent=xxx,realChildName=ccc_aaa)=ture (parent=xxx,realChildName=Layout_aaa)=false
+ *
+ */
 private fun isStyleableItemChildName(
     parent: String,
     realChildName: String,
@@ -370,12 +392,10 @@ fun aarDirToArrSmali(commandArgs: CommandArgs, aarDir: String, aarSmaliPath: Str
         FileUtils.delete(t)
     }
     var jars = findJar(aarDir)
-    var num = 1
+
     var aarSmaliFile = File(aarSmaliPath)
-    jars.forEach { t ->
-        var smailDir = getSmailDir(aarSmaliFile.absolutePath, num)
-        Jar2Dex.jar2smail(commandArgs, t.absolutePath, smailDir)
-        num++
+    jars.forEach { t -> //jar 转 smali
+        Jar2Dex.jar2smail(commandArgs, t.absolutePath, aarSmaliFile.absolutePath)
     }
 }
 

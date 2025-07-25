@@ -11,9 +11,16 @@
   <component name="ChangeListManager">
     <list default="true" id="4eaafb40-8131-4eac-be98-0f0811b2834e" name="Changes" comment="feat(aar): 实现 apk转 aar 功能&#10;&#10;- 新增 AarToSmali.kt 文件，实现 AAR 文件到 Smali 代码的转换&#10;- 更新 ApkToAarRun.kt 文件，整合 Smali转换流程&#10;- 修改 CommandArgs.java，增加相关命令行参数- 更新 FileUtils.java，添加文件追加写入方法">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/Jar2Dex.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/Jar2Dex.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/ReplaceAPk.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/ReplaceAPk.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/bean/AarConfig.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/bean/AarConfig.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/bean/ApkConfig.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/bean/ApkConfig.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/bean/ApkConfigBean.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/bean/ApkConfigBean.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/run/TestRun.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/run/TestRun.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/aar/AarToSmali.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/aar/AarToSmali.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/RenameRes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/RenameRes.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/SmaliUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/SmaliUtil.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/Smali_ClassesUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/Smali_ClassesUtil.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
