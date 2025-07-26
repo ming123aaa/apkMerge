@@ -27,6 +27,11 @@ build->build Artifacts->选中刚刚设置的Artifacts->等待jar生成
 java -jar gameSdkTool.jar -h
 常用用法已经写成.bat文件了，可以直接使用 [tools](tools)
 
+注意:如果开启了windows实时保护功能,可能会让程序执行起来很慢,需要将操作的文件夹设置为windows安全中心的排除项。
+打开“设置” > “更新和安全” > “Windows 安全中心” > “病毒和威胁防护”。
+在“病毒和威胁防护设置”下点击“管理设置”。
+滚动到“排除项”，然后点击“添加或删除排除项”。你可以添加特定的文件夹、文件类型或进程。
+
 
 ## 运行参数
 [CommandArgs.java](src/main/java/com/oh/gameSdkTool/CommandArgs.java)
