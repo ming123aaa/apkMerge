@@ -4,17 +4,15 @@ import com.oh.gameSdkTool.CommandArgs
 import com.oh.gameSdkTool.CommandRun
 import com.ohuang.apkMerge.printAllSmaliFileInfo
 
-class TestRun:CommandRun() {
+class SmaliInfoRun: CommandRun()   {
     override fun isRun(commandArgs: CommandArgs): Boolean {
-        return commandArgs.isTest
+
+        return commandArgs.showSmaliInfo
     }
 
     override fun run(commandArgs: CommandArgs) {
-        printAllSmaliFileInfo(commandArgs.basePath)
+        if (commandArgs.basePath.isNotEmpty()){
+          printAllSmaliFileInfo(commandArgs.basePath)
+        }
     }
-
-
-
-
-
 }

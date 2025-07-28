@@ -185,7 +185,8 @@ fun changeRSmaliName(path: String, map: Map<String, String>) {
                 return@forEach
             }
             var name = split[0].replace(" ", "")
-            replaceSmaliName(map, name, it, sb)
+            var end = ":I ="+split[1]
+            replaceSmaliName(map, name, it, sb, startWith = ".field public static final", end)
 
         } else if (it.startsWith(".field public static ")) {
             val s = StringBuilder().append(it).toString().replace(".field public static", "")
@@ -196,7 +197,8 @@ fun changeRSmaliName(path: String, map: Map<String, String>) {
                 return@forEach
             }
             val name = split[0].replace(" ", "")
-            replaceSmaliName(map, name, it, sb)
+            var end = ":I ="+split[1]
+            replaceSmaliName(map, name, it, sb, startWith = ".field public static", end)
         } else {
             sb.append(it)
         }
@@ -234,19 +236,21 @@ private fun replaceSmaliId(
 private fun replaceSmaliName(
     map: Map<String, String>,
     name: String,
-    it: String,
-    sb: StringBuilder
+    oldString: String,
+    sb: StringBuilder,
+    startWith: String ,
+    endWith: String
 ) {
     if (map.containsKey(name)) {
         var newName = map[name]
         if (newName != null && newName.isNotEmpty()) {
-            var sp = StringBuilder().append(it).toString().replace(name, newName)
+           var sp= "$startWith $newName$endWith"
             sb.append(sp)
         } else {
-            sb.append(it)
+            sb.append(oldString)
         }
     } else {
-        sb.append(it)
+        sb.append(oldString)
     }
 }
 

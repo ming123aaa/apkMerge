@@ -140,6 +140,9 @@ public class CommandArgs {
     @Parameter(names = {"-mergeAar"},description = "action命令,合并aar,配合命令-out、-lib、-aarConfig")
     public boolean isMergeAar=false;
 
+    @Parameter(names = {"-showSmaliInfo"},description = "action命令,配合-basePath,查看smali_classes信息")
+    public boolean showSmaliInfo=false;
+
     @Parameter(names = {"-help", "-h"}, help = true, description = "查看帮助")
     public boolean help;
 

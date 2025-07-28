@@ -170,20 +170,30 @@ class SmaliInfo {
     }
 }
 
-fun getAllSmaliFileInfo(path: String) {
 
+fun printAllSmaliFileInfo(path: String) {
     var findSmaliClass = findSmaliClassesDirSort(path)
-    findSmaliClass.forEach { classDir ->
-        var file = File(classDir)
+    if (findSmaliClass.isEmpty()) {
+        var file = File(path)
         var smaliInfo = SmaliInfo()
         forEachAllFile(file) {
             var mysmaliInfo = getSmaliFileInfo(it.absolutePath)
             smaliInfo.add(mysmaliInfo)
             false
         }
-        println("smali_class:$classDir smaliInfo:$smaliInfo")
+        println("smali_class:$path smaliInfo:$smaliInfo")
+    } else {
+        findSmaliClass.forEach { classDir ->
+            var file = File(classDir)
+            var smaliInfo = SmaliInfo()
+            forEachAllFile(file) {
+                var mysmaliInfo = getSmaliFileInfo(it.absolutePath)
+                smaliInfo.add(mysmaliInfo)
+                false
+            }
+            println("smali_class:$classDir smaliInfo:$smaliInfo")
+        }
     }
-
 }
 
 private fun getSmaliFileInfo(path: String): SmaliInfo {
@@ -264,7 +274,7 @@ private fun copySmali_Class_forSize(oldPath: String, newPath: String, maxMB: Lon
     }
 }
 
-fun getSmailDirForIndex(path: String,index: Int): String {
+fun getSmailDirForIndex(path: String, index: Int): String {
     return getSmailDirForNum(path, index)
 }
 
@@ -299,7 +309,7 @@ fun findSmaliClassesDirSort(path: String): List<String> {
 fun findDexFile(path: String): List<String> {
     val dexFilePaths = ArrayList<String>()
     var file = File(path)
-    if (file.exists()){
+    if (file.exists()) {
         if (file.isDirectory) {
             file.listFiles()?.forEach {
                 if (it.isFile && it.name.endsWith(".dex")) {
