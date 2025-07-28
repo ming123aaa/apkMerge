@@ -36,7 +36,10 @@ fun mergeApkSmali(
     println("合并完成:用时${(System.currentTimeMillis()-startTime)/1000}s")
 
 }
-
+var count=0L
+private fun getMergeApkPreCount(): Long{
+    return  count++
+}
 private fun mergeApkPre(
     channelSmali: String,
     baseSmali: String,

@@ -275,9 +275,9 @@ private fun forEachDir(file: File, call: (File) -> Boolean) {
 private fun getChangePackageName(packageName: String, startsWithName: String): String {
     var split = packageName.split(".")
     val stringBuilder = StringBuilder()
-    stringBuilder.append(startsWithName).append(".")
+    stringBuilder.append(startsWithName).append("_")
     split.forEach { string ->
-        stringBuilder.append("_").append(string).append("_").append(".")
+        stringBuilder.append(string).append(".")
     }
     return stringBuilder.deleteAt(stringBuilder.length - 1).toString()
 }

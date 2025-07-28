@@ -1,0 +1,32 @@
+{
+  "buildDirFile": "build",
+  "outDirFile": "outApk",
+  "enableChannelNames": [],
+  "disableChannelNames": [],
+  "items": [
+    {
+      "channelName": "��������",
+      "apkConfigFile": "apkConfig.json�����·��",
+      "signConfigFile": "signConfig.json�����·��",
+      "mode": "�޸���������ģʽ Ĭ��skipģʽ  skip,simple,simple_fast,merge,merge_list,merge_reverse",
+      "extraCmd": [
+        "-useChannelRes",
+        "-useChannelCode"
+      ],
+      "channelApkFile": "",
+      "listMergeConfigs": [
+        {
+          "enable": true,
+          "extraCmd": [
+            "-useChannelRes",
+            "-useChannelCode"
+          ],
+          "channelApkFile": ""
+        }
+      ],
+      "channelEnable": true,
+      "channelGroupName": "",
+      "apkName": ""
+    }
+  ]
+}

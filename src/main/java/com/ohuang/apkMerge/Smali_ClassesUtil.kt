@@ -32,7 +32,7 @@ fun limitDex_smali_class_Dir(baseSmail: String) {
 /**
  * 限制单个smali_Class的大小
  */
-fun limitSize_smali_class_Dir(baseSmail: String, maxMB: Long) {
+fun limitMaxSize_smali_class_Dir(baseSmail: String, maxMB: Long) {
     if (maxMB > 0 && maxMB < 1000) {
         var findSmaliClass = findSmaliClassesDirSort(baseSmail)
         if (findSmaliClass.isNotEmpty()) {
@@ -136,23 +136,26 @@ fun deleteSameNameSmali(baseSmail: String) {
     }
 }
 
+private const val dexMethodLimitSize = 50000 //   dex限制65535
+private const val dexFieldSize = 30000 //   dex限制65535
+private const val dexClassSize = 10000 //   dex限制65535
 class SmaliInfo {
     var methodCount: Int = 0
     var classCount: Int = 0
-    var fieldSCount: Int = 0
+    var fieldCount: Int = 0
     var annotationCount: Int = 0
 
-    fun isExceedsLimit(smaliInfo: SmaliInfo, maxSize: Int): Boolean {
-        if (methodCount + smaliInfo.methodCount > maxSize) {
+    fun isExceedsLimit(smaliInfo: SmaliInfo): Boolean {
+        if (methodCount + smaliInfo.methodCount > dexMethodLimitSize) {
             return true
         }
-        if (classCount + smaliInfo.classCount > maxSize) {
+        if (classCount + smaliInfo.classCount > dexClassSize) {
             return true
         }
-        if (fieldSCount + smaliInfo.fieldSCount > maxSize) {
+        if (fieldCount + smaliInfo.fieldCount > dexFieldSize) {
             return true
         }
-        if (annotationCount + smaliInfo.annotationCount > maxSize) {
+        if (annotationCount + smaliInfo.annotationCount > dexFieldSize) {
             return true
         }
         return false
@@ -161,7 +164,7 @@ class SmaliInfo {
     fun add(smaliInfo: SmaliInfo) {
         methodCount += smaliInfo.methodCount
         classCount += smaliInfo.classCount
-        fieldSCount += smaliInfo.fieldSCount
+        fieldCount += smaliInfo.fieldCount
         annotationCount += smaliInfo.annotationCount
     }
 
@@ -204,7 +207,7 @@ private fun getSmaliFileInfo(path: String): SmaliInfo {
         } else if (string.startsWith(".class")) {
             smaliInfo.classCount++
         } else if (string.startsWith(".field")) {
-            smaliInfo.fieldSCount++
+            smaliInfo.fieldCount++
         } else if (string.startsWith(".annotation")) {
             smaliInfo.annotationCount++
         }
@@ -213,17 +216,18 @@ private fun getSmaliFileInfo(path: String): SmaliInfo {
     return smaliInfo
 }
 
-private const val dexLimitSize = 60000 //   dex限制65535
+
 private fun copySmali_Class_ForDexLimit(oldPath: String, newPath: String) {
     var findSmaliClass = findSmaliClassesDirSort(oldPath)
     var class_count = 1
     var smaliInfo = SmaliInfo()
+    println("限制smali_classes field和method数量")
     findSmaliClass.forEach { oldSmailDir ->
         var oldFile = File(oldSmailDir)
         println("开始复制:" + oldFile.absolutePath + " -> " + getSmailDirForNum(newPath, num = class_count))
         forEachAllFile(oldFile) { smailFile ->
             var myInfo = getSmaliFileInfo(smailFile.absolutePath)
-            if (smaliInfo.isExceedsLimit(myInfo, dexLimitSize)) {
+            if (smaliInfo.isExceedsLimit(myInfo)) {
                 println("smali_${class_count}:$smaliInfo")
                 class_count++
                 println("开始复制:" + oldFile.absolutePath + " -> " + getSmailDirForNum(newPath, num = class_count))
@@ -244,7 +248,7 @@ private fun copySmali_Class_ForDexLimit(oldPath: String, newPath: String) {
 private fun copySmali_Class_forSize(oldPath: String, newPath: String, maxMB: Long) {
     var smailMaxMB = 0L
     if (maxMB <= 0) {
-        smailMaxMB = 50
+        smailMaxMB = 30
     } else {
         smailMaxMB = maxMB
     }

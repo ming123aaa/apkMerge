@@ -11,49 +11,48 @@ import java.nio.file.Paths
 import java.nio.file.StandardCopyOption
 
 
-
 fun changeClassPackage(rootPath: String, changeClassMap: Map<OldName, NewName>) {
     val findSmaliClasses = findSmaliClassesDir(rootPath)
 
-    val resFile=File("$rootPath/res")
-    if (changeClassMap.isNotEmpty() && findSmaliClasses.isNotEmpty()&&resFile.exists()) {
+    val resFile = File("$rootPath/res")
+    if (changeClassMap.isNotEmpty() && findSmaliClasses.isNotEmpty() && resFile.exists()) {
         println("开始重命名冲突Class-$rootPath")
         val pathMap = HashMap<String, String>()
         val classMap = HashMap<String, String>()
-        var newClassDir="$rootPath/smali_classes${findSmaliClasses.size+1}"
+//        var newClassDir = "$rootPath/smali_classes${findSmaliClasses.size + 1}"
 
         changeClassMap.forEach { (t, u) ->
-            if (t.replace(".","").isNotBlank()&&u.replace(".","").isNotBlank()) {
+            if (t.replace(".", "").isNotBlank() && u.replace(".", "").isNotBlank()) {
                 pathMap[t.replace(".", "/")] = u.replace(".", "/")
-                classMap[t]=u
+                classMap[t] = u
             }
         }
         findSmaliClasses.forEach {
-            renamePackageFile(it, newClassDir,pathMap)
+            renamePackageFile(it, it, pathMap)
         }
         findSmaliClasses.forEach {
             changeSmaliFile(it, pathMap)
         }
-        changeSmaliFile(newClassDir, pathMap)
-        forEachAllFile(File("$rootPath/res")){
-            if (it.endsWith(".xml")){
-                renameForXml(it,classMap)
+//        changeSmaliFile(newClassDir, pathMap)
+        forEachAllFile(File("$rootPath/res")) {
+            if (it.name.endsWith(".xml")) {
+                renameForXml(it, classMap)
             }
             false
         }
-        renameForXml(File("$rootPath/AndroidManifest.xml"),classMap)
+        renameForXml(File("$rootPath/AndroidManifest.xml"), classMap)
     }
 }
 
-private fun renameForXml(xmlFile:File,changeClassMap:Map<OldName,NewName>){
-    changTextLine(xmlFile.absolutePath){
-        return@changTextLine hasChangeText(it,changeClassMap,".")
+private fun renameForXml(xmlFile: File, changeClassMap: Map<OldName, NewName>) {
+    changTextLine(xmlFile.absolutePath) {
+        return@changTextLine hasChangeText(it, changeClassMap, startWiths = listOf<String>("/", "<", "\""), ".")
     }
 }
 
 private fun renamePackageFile(smaliDir: String, newDir: String, pathMap: Map<String, String>) {
     pathMap.forEach { t, u ->
-        if (t.isBlank()||u.isBlank()){
+        if (t.isBlank() || u.isBlank()) {
             return@forEach
         }
         val oldPath = smaliDir + "/" + t
@@ -61,30 +60,42 @@ private fun renamePackageFile(smaliDir: String, newDir: String, pathMap: Map<Str
         val file = File(oldPath)
         if (file.exists()) {
 
-                moveFile(oldPath,newPath)
+            moveFile(oldPath, newPath)
 
         }
     }
 }
 
 
-
-
 private fun changeSmaliFile(smaliDir: String, pathMap: Map<String, String>) {
+    var start = listOf<String>("L")
     forEachAllFile(File(smaliDir)) { it ->
         if (it.name.endsWith(".smali")) {
             changTextLine(it.absolutePath) { text ->
-                return@changTextLine hasChangeText(text, pathMap,"/")
+                return@changTextLine hasChangeText(text, pathMap, start, "/")
             }
         }
         return@forEachAllFile false
     }
 }
 
-private fun hasChangeText(text: String, pathMap: Map<String, String>,endWith: String): String {
+private fun hasChangeText(
+    text: String,
+    pathMap: Map<String, String>,
+    startWiths: List<String>,
+    endWith: String
+): String {
     var string = text
+
     pathMap.forEach {
-        string = string.replace(it.key+endWith, it.value+endWith)
+        if (string.contains(it.key)) {
+            startWiths.forEach { startWith ->
+                val oldString = startWith + it.key + endWith
+                if (string.contains(oldString)) {
+                    return@hasChangeText string.replace(oldString, startWith + it.value + endWith)
+                }
+            }
+        }
     }
     return string
 

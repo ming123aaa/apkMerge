@@ -1,5 +1,6 @@
 
-## 使用
+## 工具介绍
+
 通过使用gui界面来操作[apkMerge_gui](https://github.com/ming123aaa/apkMerge_gui)
 
 [aarMergeTool](https://github.com/ming123aaa/aarMergeTool) :支持aar合并,apk2aar
@@ -82,3 +83,51 @@ private const val keepResNameJson="/assets/keepResNamePackage.json" //冲突不�
 "string":["app_name"]
 }
 ```
+
+## 使用文档
+
+### 可用命令
+
+以下是工具支持的主要命令及其功能：
+
+| 命令 | 描述 |
+|------|------|
+| `-generateMergeChannelApk` | 合并渠道并生成APK |
+| `-generateMultipleChannelApk` | 批量生成渠道APK |
+| `-mergeSmali` | 合并两个包的smali环境 |
+| `-decompile` | 反编译APK |
+| `-sign` | 为APK签名 |
+| `-toApk` | 将smali环境生成APK |
+| `-changeApk` | 修改APK并重新生成 |
+| `-changeSmali` | 修改smali环境 |
+| `-apk2aar`/`-apkToAar` | 将APK转换为AAR |
+| `-mergeAar` | 合并AAR文件 |
+| `-toUnzip` | 解压文件 |
+| `-toZip` | 压缩文件 |
+
+### 常用参数说明
+
+| 参数 | 描述 | 必要 |
+|------|------|------|
+| `-libs` | 运行环境路径，包含所需的jar和可执行程序 | 是 |
+| `-out`/`-o`/`-outPath` | 输出路径 | 是 |
+| `-baseApk`/`-basePath` | 主包路径 | 部分命令 |
+| `-channelApk`/`-channelPath` | 渠道框架包路径 | 部分命令 |
+| `-apkConfig` | ApkConfig配置文件路径 | 部分命令 |
+| `-signConfig` | 签名配置文件路径 | 部分命令 |
+| `-channelConfig` | ChannelConfig配置文件路径 | 部分命令 |
+| `-aarConfig` | aarConfig配置文件路径 | 部分命令 |
+| `-baseSmali` | 主包smali环境路径 | 部分命令 |
+| `-channelSmali` | 渠道框架smali环境路径 | 部分命令 |
+
+
+### 合并apk参数
+
+| 参数 | 描述 |
+|------|------|
+| `-isRenameRes` | 资源重名时是否重命名 |
+| `-isRenameClassPackage` | 类重名时是否修改包名 |
+| `-replaceApplication` | 合并AndroidManifest.xml时替换Application类 |
+| `-useChannelRes` | 优先使用渠道包内的资源文件 |
+| `-channelCode` | 优先使用渠道的代码 |
+
