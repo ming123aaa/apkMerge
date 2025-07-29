@@ -143,6 +143,9 @@ public class CommandArgs {
     @Parameter(names = {"-showSmaliInfo"},description = "action命令,配合-basePath,查看smali_classes信息")
     public boolean showSmaliInfo=false;
 
+    @Parameter(names = {"-runCmdForWriteLog"},description = "action命令,配合-out,调用命令并输出日志")
+    public String runCmdForWriteLog="";
+
     @Parameter(names = {"-help", "-h"}, help = true, description = "查看帮助")
     public boolean help;
 

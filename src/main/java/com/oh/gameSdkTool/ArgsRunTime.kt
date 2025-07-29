@@ -25,7 +25,8 @@ object ArgsRunTime {
             ZipRun(),
             AArMergeRun(),
             ApkToAarRun(),
-            SmaliInfoRun()
+            SmaliInfoRun(),
+            CmdWriteLogRun()
         )
 
         for (run in arrayOf) {

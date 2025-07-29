@@ -42,7 +42,9 @@ object ReplaceAPk {
         }
         deleteEmpty_smali_class_Dir(rootPath)//删除空的smali_classes文件夹
         limitMaxSize_smali_class_Dir(rootPath,apkConfigBean.smaliClassSizeMB) //限制单个smali_classes文件夹大小
-        limitDex_smali_class_Dir(rootPath) //限制65535
+        if (apkConfigBean.isOptimizeSmaliClass) {
+            limitDex_smali_class_Dir(rootPath) //限制65535
+        }
         println("ApkConfig内容修改完成:用时${(System.currentTimeMillis() - startTime) / 1000}s")
 
     }

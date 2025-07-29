@@ -32,8 +32,8 @@ fun limitDex_smali_class_Dir(baseSmail: String) {
 /**
  * 限制单个smali_Class的大小
  */
-fun limitMaxSize_smali_class_Dir(baseSmail: String, maxMB: Long) {
-    if (maxMB > 0 && maxMB < 1000) {
+fun limitMaxSize_smali_class_Dir(baseSmail: String, maxMB: Double) {
+    if (maxMB >= 1.0 && maxMB <= 1000) {
         var findSmaliClass = findSmaliClassesDirSort(baseSmail)
         if (findSmaliClass.isNotEmpty()) {
             var tempFileDir = File(baseSmail + temp_smali)
@@ -245,11 +245,9 @@ private fun copySmali_Class_ForDexLimit(oldPath: String, newPath: String) {
     }
 }
 
-private fun copySmali_Class_forSize(oldPath: String, newPath: String, maxMB: Long) {
-    var smailMaxMB = 0L
-    if (maxMB <= 0) {
-        smailMaxMB = 30
-    } else {
+private fun copySmali_Class_forSize(oldPath: String, newPath: String, maxMB: Double) {
+    var smailMaxMB =30.0
+    if (maxMB > 1.0) {
         smailMaxMB = maxMB
     }
     println("限制smali_classes大小 $smailMaxMB MB")

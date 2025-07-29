@@ -17,8 +17,9 @@ class AarConfig {
     var deleteSmaliPaths: List<String> = emptyList() //需要删除的smail的文件   com/google   com/xxx/R.smali
     var isDeleteSameNameSmali: Boolean = true  //是否删除相同名称的smali文件
     var deleteManifestNodeNames: Set<String> = emptySet() //根据name删除的AndroidManifest.xml对应的节点
-    var smaliClassSizeMB: Long =
-        30 //限制smaliClass文件的大小,避免方法数量超出限制无法打包,推荐值30MB， 若smaliClassSizeMB<=0或smaliClassSizeMB>=1000将不限制文件大小
+    var smaliClassSizeMB: Double =
+        30.0 //限制smaliClass文件的大小,避免方法数量超出限制无法打包,推荐值30MB， 只有 maxMB >= 1.0 && maxMB <= 1000 生效
+    var isOptimizeSmaliClass: Boolean = true
 }
 
 data class AarConfigData(
@@ -29,12 +30,12 @@ data class AarConfigData(
     var replaceStringManifest: List<ReplaceStringData>, // AndroidManifest.xml 字符串替换   用于复杂的数据替换
     var deleteFileList: List<String>, //需要删除的文件， 示例 res/mipmap-anydpi
     var changeClassPackage: Map<OldName, NewName>, // 修改class所在的包名  com.xxx.yyy 中间用.隔开
-    var smaliClassSizeMB: Long,//限制smaliClass文件的大小,避免方法数量超出限制无法打包,推荐值50MB， 若smaliClassSizeMB<=0或smaliClassSizeMB>=1000将不限制文件大小
+    var smaliClassSizeMB: Double,//限制smaliClass文件的大小,避免方法数量超出限制无法打包,推荐值30MB，  只有 maxMB >= 1.0 && maxMB <= 1000 生效
 
     var deleteSmaliPaths: List<String>, //需要删除的smail的文件   com/google   com/xxx/R.smali
     var isDeleteSameNameSmali: Boolean,  //是否删除相同名称的smali文件
     var deleteManifestNodeNames: Set<String>, //根据name删除的AndroidManifest.xml对应的节点)
-
+    var isOptimizeSmaliClass: Boolean
 )
 
 fun AarConfigData.toApkConfig(): ApkConfigBean {
@@ -56,7 +57,7 @@ fun AarConfigData.toApkConfig(): ApkConfigBean {
         deleteSmaliPaths = deleteSmaliPaths,
         isDeleteSameNameSmali = isDeleteSameNameSmali,
         deleteManifestNodeNames = deleteManifestNodeNames,
-        smaliClassSizeMB = smaliClassSizeMB
+        smaliClassSizeMB = smaliClassSizeMB, isOptimizeSmaliClass = isOptimizeSmaliClass
     )
 }
 
@@ -83,6 +84,8 @@ private fun createAarConfigData(path: String): AarConfigData {
         changeClassPackage = fromJson.changeClassPackage,
         deleteSmaliPaths = fromJson.deleteSmaliPaths,
         isDeleteSameNameSmali = fromJson.isDeleteSameNameSmali,
-        deleteManifestNodeNames = fromJson.deleteManifestNodeNames, smaliClassSizeMB = fromJson.smaliClassSizeMB
+        deleteManifestNodeNames = fromJson.deleteManifestNodeNames,
+        smaliClassSizeMB = fromJson.smaliClassSizeMB,
+        isOptimizeSmaliClass = fromJson.isOptimizeSmaliClass
     )
 }
