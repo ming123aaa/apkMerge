@@ -29,7 +29,7 @@ fun mergeAarSmali(oldAArSmali: String, newAArSmali: String) {
     }
     copySmaliClass(oldAArSmali, newAArSmali)
     mergeRes(oldAArSmali, newAArSmali)
-    mergeSafeManifest(path = oldAArSmali + AndroidManifest, mainPath = newAArSmali + AndroidManifest)
+    mergeSafeManifest(channelPath = oldAArSmali + AndroidManifest, mainPath = newAArSmali + AndroidManifest)
     mergeText(oldAArSmali, newAArSmali, proguard)
     mergeText(oldAArSmali, newAArSmali, RText)
     mergeText(oldAArSmali, newAArSmali, PublicText)

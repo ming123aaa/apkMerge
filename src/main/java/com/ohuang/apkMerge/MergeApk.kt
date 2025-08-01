@@ -7,7 +7,6 @@ import java.io.File
 fun mergeApkSmali(
     channelSmali: String,
     baseSmali: String,
-    isNewId: Boolean = false,
     commandArgs: CommandArgs
 ) {
     var startTime = System.currentTimeMillis()
@@ -17,12 +16,13 @@ fun mergeApkSmali(
         baseSmali = baseSmali,
         isRenameClassPackage = commandArgs.isRenameClassPackage,
         isRenameRes = commandArgs.isRenameRes,
-        notUseDefaultKeepClassPackage = commandArgs.notUseDefaultKeepClassPackage
+        notUseDefaultKeepClassPackage = commandArgs.notUseDefaultKeepClassPackage,
+        isReNameStyle = commandArgs.isReNameStyle,
+        isReNameAttr = commandArgs.isReNameAttr
     )
     mergeApk(
         channelSmali = channelSmali,
         baseSmali = baseSmali,
-        isNewId = isNewId,
         isUseChannelCodeFirst = commandArgs.isChannelCode,
         isUseChannelApktoolYml = commandArgs.isUseChannelApktoolYml,
         isReplaceApplication = commandArgs.isReplaceApplication,
@@ -32,27 +32,39 @@ fun mergeApkSmali(
         isUseChannelFileRes = commandArgs.isUseChannelFileRes || commandArgs.isChannelRes,
         isUseChannelFileManifest = commandArgs.isUseChannelFileManifest || commandArgs.isChannelRes,
         isUseChannelFileOther = commandArgs.isUseChannelFileOther || commandArgs.isChannelRes,
+        isKeepActivityTheme = commandArgs.isKeepActivityTheme
     )
-    println("合并完成:用时${(System.currentTimeMillis()-startTime)/1000}s")
+    println("合并完成:用时${(System.currentTimeMillis() - startTime) / 1000}s")
 
 }
-var count=0L
-private fun getMergeApkPreCount(): Long{
-    return  count++
+
+var count = 0L
+private fun getMergeApkPreCount(): Long {
+    return count++
 }
+
 private fun mergeApkPre(
     channelSmali: String,
     baseSmali: String,
     isRenameClassPackage: Boolean,
     isRenameRes: Boolean,
-    notUseDefaultKeepClassPackage: Boolean
+    notUseDefaultKeepClassPackage: Boolean,
+    isReNameStyle: Boolean,
+    isReNameAttr: Boolean
 ) {
     mergeApkPreReplace(channelSmali) //合并前替换
 
     var startsWithName = getMaigicNum_a_z(System.currentTimeMillis())
-    if (isRenameRes) { //资源冲突重命名
-        mergeApkRenameRes(channelSmali = channelSmali, baseSmali = baseSmali, startsWithName = startsWithName)
-    }
+
+    //资源冲突重命名
+    mergeApkRenameRes(
+        channelSmali = channelSmali,
+        baseSmali = baseSmali,
+        startsWithName = startsWithName,
+        isReNameStyle = isReNameStyle,
+        isRenameRes = isRenameRes, isReNameAttr = isReNameAttr
+    )
+
     if (isRenameClassPackage) { //class冲突重命名
         mergeApkRenameClass(
             channelSmali = channelSmali,
@@ -76,7 +88,6 @@ private fun mergeApkPre(
 private fun mergeApk(
     channelSmali: String,
     baseSmali: String,
-    isNewId: Boolean,
     isUseChannelCodeFirst: Boolean,
     isUseChannelApktoolYml: Boolean,
     isReplaceApplication: Boolean,
@@ -86,11 +97,12 @@ private fun mergeApk(
     isUseChannelFileRes: Boolean,
     isUseChannelFileManifest: Boolean,
     isUseChannelFileOther: Boolean,
+    isKeepActivityTheme: Boolean,
 ) {
 
 
     println("---开始复制res---")
-    mergeRes(channelSmali, baseSmali, isNewId, isUseChannelFileRes)
+    mergeRes(channelSmali, baseSmali, isUseChannelFileRes)
     println("---开始复制lib---")
     copyPathAllFile("$channelSmali/lib", "$baseSmali/lib", isCover = isUseChannelFileLib)
     println("---开始复制assets---")
@@ -118,14 +130,20 @@ private fun mergeApk(
 
     if (isUseChannelFileManifest) {
         preMergeManifestSetLauncherActivity("$baseSmali/AndroidManifest.xml", "$channelSmali/AndroidManifest.xml")
+        if (isKeepActivityTheme) {
+            setActivityAppTheme("$baseSmali/AndroidManifest.xml")
+        }
         mergeSafeManifest(
             "$baseSmali/AndroidManifest.xml",
             "$channelSmali/AndroidManifest.xml",
             "$baseSmali/AndroidManifest.xml",
-            isReplaceApplication
+            isReplaceApplication = isReplaceApplication
         )
     } else {
         preMergeManifestSetLauncherActivity("$channelSmali/AndroidManifest.xml", "$baseSmali/AndroidManifest.xml")
+        if (isKeepActivityTheme) {
+            setActivityAppTheme("$channelSmali/AndroidManifest.xml")
+        }
         mergeSafeManifest(
             "$channelSmali/AndroidManifest.xml",
             "$baseSmali/AndroidManifest.xml",
@@ -141,21 +159,19 @@ private fun mergeApk(
 
 }
 
- fun mergeRes(
+fun mergeRes(
     channelSmali: String,
     baseSmali: String,
-    isNewId: Boolean=false,
-    isUseChannelFileRes: Boolean=false
+    isUseChannelFileRes: Boolean = false
 ) {
-     val targetPath = "$baseSmali/res"
+    val targetPath = "$baseSmali/res"
     File("$channelSmali/res").listFiles()?.forEach {
         if (it.isDirectory) {
             if (it.name.startsWith("values")) {
                 mergeValueXml(
                     it.absolutePath,
                     targetPath + "/${it.name}",
-                    isNewID = isNewId,
-                    usePath = isUseChannelFileRes
+                    isUseChannelFileRes = isUseChannelFileRes
                 )
             } else {
                 copyResChildDir(it.absolutePath, targetPath + "/${it.name}", isCover = isUseChannelFileRes)

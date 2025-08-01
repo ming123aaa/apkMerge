@@ -9,17 +9,31 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4eaafb40-8131-4eac-be98-0f0811b2834e" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/run/CmdWriteLogRun.kt" afterDir="false" />
+    <list default="true" id="4eaafb40-8131-4eac-be98-0f0811b2834e" name="Changes" comment="feat(toolbox): 添加 CmdWriteLogRun 功能&#10;&#10;- 新增 CmdWriteLogRun 类，用于调用命令并输出日志&#10;- 修改 ArgsRunTime 和 CommandArgs，增加 CmdWriteLog 相关参数- 优化 ExecUtil 类，支持异步读取命令输出&#10;- 更新 ReplaceAPk 和 Smali_ClassesUtil，增加优化 Smali 文件功能">
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/channelApk/ChangeChannelApkBuild.kt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/channelApk/DecompileChannelApkBuild.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/ArgsRunTime.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/ArgsRunTime.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/CommandArgs.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/CommandArgs.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/Decompile.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/Decompile.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/ReplaceAPk.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/ReplaceAPk.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/bean/AarConfig.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/bean/AarConfig.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/bean/ApkConfig.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/bean/ApkConfig.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/bean/ApkConfigBean.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/bean/ApkConfigBean.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/Smali_ClassesUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/Smali_ClassesUtil.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/replacePackage/ExecUtil.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/replacePackage/ExecUtil.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/bean/ChannelConfig.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/bean/ChannelConfig.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/channelApk/BaseChannelApkBuild.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/channelApk/BaseChannelApkBuild.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/channelApk/ChannelApkBuild.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/channelApk/ChannelApkBuild.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/channelApk/SimpleFastChannelApkBuild.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/channelApk/SimpleFastChannelApkBuild.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/run/TestRun.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/run/TestRun.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/aar/AArRes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/aar/AArRes.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/AndroidManifestUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/AndroidManifestUtil.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/ChangeClassPackage.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/ChangeClassPackage.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/MergeApk.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/MergeApk.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/MergeApkRename.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/MergeApkRename.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/MergeApkReplace.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/MergeApkReplace.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/PublicXml.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/PublicXml.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/RenameRes.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/RenameRes.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/ValueXmlUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/ValueXmlUtil.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/XmlUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/XmlUtil.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -176,8 +190,8 @@
       <recent name="E:\ideaProject\gameSdkTool\gameSdkTool\src\main\java\com\ohuang\replacePackage" />
     </key>
     <key name="CopyKotlinDeclarationDialog.RECENTS_KEY">
-      <recent name="com.oh.gameSdkTool.run" />
       <recent name="com.oh.gameSdkTool.channelApk" />
+      <recent name="com.oh.gameSdkTool.run" />
     </key>
     <key name="CopyClassDialog.RECENTS_KEY">
       <recent name="com.oh.gameSdkTool" />
@@ -382,7 +396,15 @@
       <option name="project" value="LOCAL" />
       <updated>1753672876470</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="feat(toolbox): 添加 CmdWriteLogRun 功能&#10;&#10;- 新增 CmdWriteLogRun 类，用于调用命令并输出日志&#10;- 修改 ArgsRunTime 和 CommandArgs，增加 CmdWriteLog 相关参数- 优化 ExecUtil 类，支持异步读取命令输出&#10;- 更新 ReplaceAPk 和 Smali_ClassesUtil，增加优化 Smali 文件功能">
+      <option name="closed" value="true" />
+      <created>1753769555106</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1753769555106</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -428,6 +450,7 @@
     <MESSAGE value="feat(toolbox): 添加 AAR 文件合并功能&#10;&#10;- 新增 AarConfig 类用于配置 AAR 文件合并参数&#10;- 实现 AAR 文件合并的核心逻辑和相关工具函数- 添加命令行参数支持 AAR 文件合并功能&#10;- 优化现有代码结构，提高可维护性和可扩展性" />
     <MESSAGE value="feat(aar): 实现 apk转 aar 功能&#10;&#10;- 新增 AarToSmali.kt 文件，实现 AAR 文件到 Smali 代码的转换&#10;- 更新 ApkToAarRun.kt 文件，整合 Smali转换流程&#10;- 修改 CommandArgs.java，增加相关命令行参数- 更新 FileUtils.java，添加文件追加写入方法" />
     <MESSAGE value="feat(toolbox): 添加 Smali信息查看功能&#10;&#10;- 新增 SmaliInfoRun 类，用于显示 Smali 信息&#10;- 修改 ArgsRunTime 和 CommandArgs，增加 Smali 信息查看相关参数&#10;-优化 Smali_ClassesUtil 中的 Smali 信息获取逻辑" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat(toolbox): 添加 Smali信息查看功能&#10;&#10;- 新增 SmaliInfoRun 类，用于显示 Smali 信息&#10;- 修改 ArgsRunTime 和 CommandArgs，增加 Smali 信息查看相关参数&#10;-优化 Smali_ClassesUtil 中的 Smali 信息获取逻辑" />
+    <MESSAGE value="feat(toolbox): 添加 CmdWriteLogRun 功能&#10;&#10;- 新增 CmdWriteLogRun 类，用于调用命令并输出日志&#10;- 修改 ArgsRunTime 和 CommandArgs，增加 CmdWriteLog 相关参数- 优化 ExecUtil 类，支持异步读取命令输出&#10;- 更新 ReplaceAPk 和 Smali_ClassesUtil，增加优化 Smali 文件功能" />
+    <option name="LAST_COMMIT_MESSAGE" value="feat(toolbox): 添加 CmdWriteLogRun 功能&#10;&#10;- 新增 CmdWriteLogRun 类，用于调用命令并输出日志&#10;- 修改 ArgsRunTime 和 CommandArgs，增加 CmdWriteLog 相关参数- 优化 ExecUtil 类，支持异步读取命令输出&#10;- 更新 ReplaceAPk 和 Smali_ClassesUtil，增加优化 Smali 文件功能" />
   </component>
 </project>

@@ -23,7 +23,9 @@ fun mergeApkPreReplace(channelRootPath: String) {
             println("合并前ApkConfig修改内容:${channelRootPath+assets_merge_ApkConfig}")
             var config = getConfig(channelRootPath)
             ReplaceAPk.replaceApK(channelRootPath,config)
-            FileUtils.delete(File(mergeApkContent))
+        }
+        tryCatch{
+            FileUtils.delete(File(channelRootPath+mergeApkContent))
         }
 
     }

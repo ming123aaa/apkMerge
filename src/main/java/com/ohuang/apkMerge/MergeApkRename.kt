@@ -7,15 +7,13 @@ import com.oh.gameSdkTool.bean.OldName
 import com.oh.gameSdkTool.bean.ResType
 import com.ohuang.replacePackage.FileUtils
 import java.io.File
+import java.util.TreeMap
 
 private const val publicXml = "/res/values/public.xml"
 private const val servicesDir = "/META-INF//services"
 
 private const val keepClassJson = "/assets/keepClassPackage.json"  //冲突不修改的class  Set<String>
 private const val keepResNameJson = "/assets/keepResNamePackage.json" //冲突不修改的res  Map<resType,Set<name>>
-
-
-
 
 
 private fun readKeepClassJson(root: String): Set<String> {
@@ -56,16 +54,16 @@ fun mergeApkRenameKeepJson(
     //合并keepResNamePackage.json
     var keepResName = mutableMapOf<ResType, MutableSet<String>>()
     readKeepResNameJson(channelSmali).forEach { type, set ->
-        if (!keepResName.contains(type)){
-            keepResName[type]=mutableSetOf<String>()
+        if (!keepResName.contains(type)) {
+            keepResName[type] = mutableSetOf<String>()
         }
         var strings: MutableSet<String> = keepResName[type]!!
         strings.addAll(set)
 
     }
     readKeepResNameJson(baseSmali).forEach { type, set ->
-        if (!keepResName.contains(type)){
-            keepResName[type]=mutableSetOf<String>()
+        if (!keepResName.contains(type)) {
+            keepResName[type] = mutableSetOf<String>()
         }
         var strings: MutableSet<String> = keepResName[type]!!
         strings.addAll(set)
@@ -93,18 +91,89 @@ fun mergeApkRenameKeepJson(
  */
 fun mergeApkRenameRes(
     channelSmali: String,
-    baseSmali: String, startsWithName: String
+    baseSmali: String,
+    startsWithName: String,
+    isReNameStyle: Boolean,
+    isReNameAttr: Boolean,
+    isRenameRes: Boolean
 ) {
     val base = readPublic(baseSmali + publicXml)
     val channel = readPublic(channelSmali + publicXml)
     var resRenameMap = HashMap<ResType, HashMap<OldName, NewName>>()
     channel.forEach { type, map ->
+        if (type == "attr" ) {
+            return@forEach
+        }
+        if (type == "id") { //id不处理,id重复一般不影响运行
+            return@forEach
+        }
+        if (type == "style" && isReNameStyle){
+            addSameNameToRenameMap(base, type, map, startsWithName, resRenameMap) //将重名的name添加到resRenameMap
+            return@forEach
+        }
+        if (isRenameRes) {
+            addSameNameToRenameMap(base, type, map, startsWithName, resRenameMap)//将重名的name添加到resRenameMap
+        }
+    }
+    if (isReNameAttr && channel.contains("attr")) {
+        val channelAttrMap = channel["attr"]!!
+        val typeMap = HashMap<OldName, NewName>()
+        channelAttrMap.forEach { key, u -> // 所有attr的都重名名
+            typeMap[key] = startsWithName + "_" + key.replace("$", "_")//重名名(带$名称会导致打包失败,需要替换一下) 
+        }
+        if (typeMap.isNotEmpty()) {
+            resRenameMap["attr"] = typeMap
+        }
+    }
+    useKeepResName(channelSmali, resRenameMap) //res保持不变的规则
+    writeLogResMapJson(channelSmali, resRenameMap)
+    renameRes(rootPath = channelSmali, resRenameMap) //开始重命名冲突文件
+}
+
+private fun addSameNameToRenameMap(
+    base: TreeMap<String, TreeMap<String, String>>,
+    type: String,
+    map: TreeMap<String, String>,
+    startsWithName: String,
+    resRenameMap: HashMap<ResType, HashMap<OldName, NewName>>
+) {
+    val typeMap = HashMap<OldName, NewName>()
+    if (base.contains(type)) {
+        val baseTypeMap = base[type]!!
+        map.forEach { key, v ->
+            if (baseTypeMap.contains(key)) {
+                typeMap[key] = startsWithName + "_" + key.replace("$", "_") //重名名(带$名称会导致打包失败,需要替换一下)
+            }
+        }
+    }
+    if (typeMap.isNotEmpty()) {
+        resRenameMap[type] = typeMap
+    }
+}
+
+
+/**
+ * 处理res冲突
+ */
+fun mergeApkRenameResAttr(
+    channelSmali: String,
+    baseSmali: String,
+    startsWithName: String,
+
+    ) {
+    val base = readPublic(baseSmali + publicXml)
+    val channel = readPublic(channelSmali + publicXml)
+    var resRenameMap = HashMap<ResType, HashMap<OldName, NewName>>()
+    channel.forEach { type, map ->
+        if (type != "attr") {
+            return@forEach
+        }
         val typeMap = HashMap<OldName, NewName>()
         if (base.contains(type)) {
             val baseTypeMap = base[type]!!
             map.forEach { key, v ->
                 if (baseTypeMap.contains(key)) {
-                    typeMap[key] = startsWithName + "_" + key
+                    typeMap[key] = startsWithName + "_" + key.replace("$", "_") //重名名(带$名称会导致打包失败,需要替换一下)
                 }
             }
         }
@@ -114,7 +183,7 @@ fun mergeApkRenameRes(
     }
 
     useKeepResName(channelSmali, resRenameMap) //res保持不变的规则
-    writeLogResMapJson(channelSmali, resRenameMap)
+
     renameRes(rootPath = channelSmali, resRenameMap) //开始重命名冲突文件
 }
 
@@ -144,7 +213,7 @@ fun mergeApkRenameClass(
     val replaceMap = HashMap<String, String>() //冲突后生成的替换规则
     findSmaliClassesDir(baseFile.absolutePath).forEach { path ->
         var rootClassFile = File(path)
-        var startIndex=rootClassFile.absolutePath.length
+        var startIndex = rootClassFile.absolutePath.length
         forEachAllFile(rootClassFile) {
             if (it.name.endsWith(".smali")) {
                 var packageName = it.parentFile.absolutePath.substring(startIndex).path2Package()
@@ -153,10 +222,10 @@ fun mergeApkRenameClass(
             return@forEachAllFile false
         }
     }
-    writeLogJsonFile(baseSmali,"package",Gson().toJson(baseSetPackage))
+    writeLogJsonFile(baseSmali, "package", Gson().toJson(baseSetPackage))
     findSmaliClassesDir(channelFile.absolutePath).forEach { path ->
         var rootClassFile = File(path)
-        var startIndex=rootClassFile.absolutePath.length
+        var startIndex = rootClassFile.absolutePath.length
         forEachAllFile(rootClassFile) {
             if (it.name.endsWith(".smali")) {
                 var packageName = it.parentFile.absolutePath.substring(startIndex).path2Package()
@@ -165,10 +234,10 @@ fun mergeApkRenameClass(
             return@forEachAllFile false
         }
     }
-    writeLogJsonFile(channelSmali,"package",Gson().toJson(channelSetPackage))
+    writeLogJsonFile(channelSmali, "package", Gson().toJson(channelSetPackage))
     findSmaliClassesDir(channelFile.absolutePath).forEach { path ->
         var rootClassFile = File(path)
-        var startIndex=rootClassFile.absolutePath.length
+        var startIndex = rootClassFile.absolutePath.length
         forEachDir(rootClassFile) { file -> //遍历文件夹
             if (file.absolutePath == rootClassFile.absolutePath) {
                 return@forEachDir false
@@ -275,7 +344,7 @@ private fun forEachDir(file: File, call: (File) -> Boolean) {
 private fun getChangePackageName(packageName: String, startsWithName: String): String {
     var split = packageName.split(".")
     val stringBuilder = StringBuilder()
-    stringBuilder.append(startsWithName).append("_")
+    stringBuilder.append(startsWithName).append(".")
     split.forEach { string ->
         stringBuilder.append(string).append(".")
     }

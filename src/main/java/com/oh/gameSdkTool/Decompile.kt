@@ -285,7 +285,7 @@ object Decompile {
             javaexe.replace(" ", "\" \"")
         }
         val cmd =
-            "$java -Dfile.encoding=utf-8 -jar \"$apktool\" b \"${smaliPath}\" -o \"${outApkfile.absolutePath}\""
+            "$java -Dfile.encoding=utf-8 -jar \"$apktool\" b \"${smaliPath}\" -o \"${outApkfile.absolutePath}\" --use-aapt2"
         println(cmd)
         var execAndPrint = ExecUtil.exec(arrayOf("cmd.exe", "/c", cmd), 60 * 60, GlobalConfig.isLog)
         println(execAndPrint)

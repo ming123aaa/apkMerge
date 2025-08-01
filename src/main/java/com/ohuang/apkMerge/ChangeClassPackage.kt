@@ -92,7 +92,7 @@ private fun hasChangeText(
             startWiths.forEach { startWith ->
                 val oldString = startWith + it.key + endWith
                 if (string.contains(oldString)) {
-                    return@hasChangeText string.replace(oldString, startWith + it.value + endWith)
+                    string=string.replace(oldString, startWith + it.value + endWith)
                 }
             }
         }

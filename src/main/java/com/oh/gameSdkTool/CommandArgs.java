@@ -38,6 +38,8 @@ public class CommandArgs {
 
 
 
+
+
     @Parameter(names = {"-channelRes","-isCoverFile","-useChannelRes"},description = "优先使用渠道包内的res、assets、AndroidManifest.xml等，" +
             "等价于-isUseChannelFileAssets、-isUseChannelFileLib、-isUseChannelFileRes、-isUseChannelFileManifest、-isUseChannelFileOther命令同时使用")
     public Boolean isChannelRes=false;
@@ -57,6 +59,9 @@ public class CommandArgs {
     @Parameter(names = {"-isUseChannelFileOther"},description = "优先使用渠道包内的其他文件,其他文件指的是(kotlin、unknown)")
     public Boolean isUseChannelFileOther=false;
 
+    @Parameter(names = {"-keepActivityTheme"},description = "合并前将Application theme添加到没有theme的Activity上")
+    public Boolean isKeepActivityTheme=false;
+
     @Parameter(names = {"-channelCode","-useChannelCode"},description = "优先使用渠道的代码")
     public Boolean isChannelCode=false;
 
@@ -66,18 +71,25 @@ public class CommandArgs {
     @Parameter(names = {"-replaceApplication"},description = "合并AndroidManifest.xml替换Application类  若配合-useChannelRes命令使用application会替换成变成主包的,否则application替换成渠道包的")
     public Boolean isReplaceApplication=false;
 
-    @Parameter(names = {"-changeNotRSmali"},description = "修改没有引用R文件的id,通过修改0X7f开头的值实现。")
+    @Parameter(names = {"-changeNotRSmali"},description = "修改没有引用R.class的id值,通过修改0X7f开头的值实现。")
     public Boolean isChangeNotRSmali=false;
 
 
     @Parameter(names = {"-isRenameRes"},description = "res出现重名情况,是否重命名。apk合并时使用")
     public Boolean isRenameRes=false;
+    @Parameter(names = {"-isReNameStyle"},description = "不重命名style,需要配合-isRenameRes使用")
+    public boolean isReNameStyle=false;
+
+
+    @Parameter(names = {"-reNameAttr"},description = "重命名attr")
+    public Boolean isReNameAttr=false;
 
     @Parameter(names = {"-isRenameClassPackage"},description = "class出现重名情况,是否修改package。apk合并时使用")
     public Boolean isRenameClassPackage=false;
 
     @Parameter(names = {"-notUseDefaultKeepClassPackage"},description = "禁用默认的keep class规则。apk合并时使用")
     public boolean notUseDefaultKeepClassPackage=false;
+
 
     @Parameter(names = {"-apkConfig"}, description = "设置ApkConfig")
     public String apkConfig = "";
@@ -143,7 +155,7 @@ public class CommandArgs {
     @Parameter(names = {"-showSmaliInfo"},description = "action命令,配合-basePath,查看smali_classes信息")
     public boolean showSmaliInfo=false;
 
-    @Parameter(names = {"-runCmdForWriteLog"},description = "action命令,配合-out,调用命令并输出日志")
+    @Parameter(names = {"-runCmdForWriteLog"},description = "action命令,配合-out设置输出文件,调用命令并输出日志")
     public String runCmdForWriteLog="";
 
     @Parameter(names = {"-help", "-h"}, help = true, description = "查看帮助")

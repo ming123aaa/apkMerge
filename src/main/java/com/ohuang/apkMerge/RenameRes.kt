@@ -18,28 +18,46 @@ fun renameRes(rootPath: String, renameResMap: Map<ResType, Map<OldName, NewName>
         renameResValues(rootPath = rootPath, renameResMap = renameResMap)
         renamePublicXml(rootPath = rootPath, renameResMap = renameResMap)
         renameXmlRef(rootPath = rootPath, renameResMap = renameResMap)
+        renameXmlAttr(rootPath = rootPath, renameResMap = renameResMap)
         changeRSmaliId(rootPath = rootPath, renameResMap = renameResMap)
         renameSmali(rootPath = rootPath, renameResMap = renameResMap)
     }
-
 }
+
+private fun renameXmlAttr(rootPath: String, renameResMap: Map<ResType, Map<OldName, NewName>>) {
+    if (renameResMap.containsKey("attr")) {
+        var map = renameResMap["attr"]!!
+        if (map.isEmpty()) {
+            return
+        }
+        forEachAllFile(File("$rootPath/res")) {xmlFile ->
+            if (xmlFile.isFile && xmlFile.name.endsWith(".xml")) {
+                tryCatch(false) {
+                    replaceXmlAttr(xmlFile.absolutePath, map)
+                }
+            }
+            false
+        }
+    }
+}
+
 
 /**
  * 修改
  */
 private fun changeRSmaliId(rootPath: String, renameResMap: Map<ResType, Map<OldName, NewName>>) {
     val findSmaliClasses = findSmaliClassesDir(rootPath)
-    val data= ArrayList<String>()
+    val data = ArrayList<String>()
     findSmaliClasses.forEach { t ->
-        searchFileInPath(t,"R.smali",data)
+        searchFileInPath(t, "R.smali", data)
     }
     data.forEach { t ->
         val file = File(t)
-        var dirPath=file.parentFile.absolutePath
-        renameResMap.forEach{
+        var dirPath = file.parentFile.absolutePath
+        renameResMap.forEach {
             var myFile = File("$dirPath/R\$" + it.key + ".smali")
-            if (myFile.exists()&&myFile.isFile){
-                changeRSmaliName(myFile.absolutePath,it.value)
+            if (myFile.exists() && myFile.isFile) {
+                changeRSmaliName(myFile.absolutePath, it.value)
             }
         }
 
@@ -47,13 +65,13 @@ private fun changeRSmaliId(rootPath: String, renameResMap: Map<ResType, Map<OldN
 }
 
 private fun renameSmali(rootPath: String, renameResMap: Map<ResType, Map<OldName, NewName>>) {
-    val smailPattern=getSmailPattern(renameResMap)
+    val smailPattern = getSmailPattern(renameResMap)
 
     findSmaliClassesDir(rootPath).forEach { t ->
-        forEachAllFile(File(t)){
-            if (it.isFile&&it.name.endsWith(".smali")){
+        forEachAllFile(File(t)) {
+            if (it.isFile && it.name.endsWith(".smali")) {
                 changTextLine(it.absolutePath) { string ->
-                    return@changTextLine replaceRefSmail(string,renameResMap,smailPattern)
+                    return@changTextLine replaceRefSmail(string, renameResMap, smailPattern)
                 }
             }
             false
@@ -62,14 +80,15 @@ private fun renameSmali(rootPath: String, renameResMap: Map<ResType, Map<OldName
     }
 }
 
-fun getSmailPattern( renameResMap: Map<ResType, Map<OldName, NewName>>):Pattern{
+fun getSmailPattern(renameResMap: Map<ResType, Map<OldName, NewName>>): Pattern {
     var types = ""
     renameResMap.forEach {
         types = types + it.key + "|"
     }
-    val smailPattern = Pattern.compile("""R\$"""+"(${types});->([^\\s\"'></:]+):")
+    val smailPattern = Pattern.compile("""R\$""" + "(${types});->([^\\s\"'></:]+):")
     return smailPattern
 }
+
 fun replaceRefSmail(text: String, replace: Map<ResType, Map<OldName, NewName>>, smailPattern: Pattern): String {
     val matcher = smailPattern.matcher(text)
     val sb = StringBuffer()
@@ -86,8 +105,8 @@ fun replaceRefSmail(text: String, replace: Map<ResType, Map<OldName, NewName>>, 
         val replacement = Matcher.quoteReplacement("R$${resTypeStr};->$newName:")
         try {
             matcher.appendReplacement(sb, replacement)
-        }catch (e: Exception){
-            println("text=$text"+" resTypeStr=${resTypeStr} oldName=${oldName} replacement=${replacement}")
+        } catch (e: Exception) {
+            println("text=$text" + " resTypeStr=${resTypeStr} oldName=${oldName} replacement=${replacement}")
             throw e
         }
     }
@@ -101,7 +120,7 @@ fun replaceRefSmail(text: String, replace: Map<ResType, Map<OldName, NewName>>, 
  */
 private fun renameXmlRef(rootPath: String, renameResMap: Map<ResType, Map<OldName, NewName>>) {
 
-    val xmlPattern=getXmlPattern(renameResMap)
+    val xmlPattern = getXmlPattern(renameResMap)
     File("$rootPath/res").listFiles()?.forEach { it ->
         if (it.isDirectory) {
             it.listFiles()?.forEach { xmlFile ->
@@ -119,15 +138,15 @@ private fun renameXmlRef(rootPath: String, renameResMap: Map<ResType, Map<OldNam
 }
 
 
-
 private fun replaceXmlRef(xmlPath: String, renameResMap: Map<ResType, Map<OldName, NewName>>, xmlPattern: Pattern) {
-    changTextLine(xmlPath) {string->
-        return@changTextLine runCatching{replaceRef(string, renameResMap, xmlPattern = xmlPattern)}.onFailure({
+    changTextLine(xmlPath) { string ->
+        return@changTextLine runCatching { replaceRef(string, renameResMap, xmlPattern = xmlPattern) }.onFailure({
             println("replaceXmlRef  error: xmlPath=$xmlPath content=$string error=$it")
-        }).getOrNull()?:string
+        }).getOrNull() ?: string
     }
 }
-private fun getXmlPattern(renameResMap: Map<ResType, Map<OldName, NewName>>):Pattern{
+
+private fun getXmlPattern(renameResMap: Map<ResType, Map<OldName, NewName>>): Pattern {
     var types = ""
     renameResMap.forEach {
         types = types + it.key + "|"
@@ -151,7 +170,7 @@ fun replaceRef(text: String, replace: Map<ResType, Map<OldName, NewName>>, xmlPa
         // 如果找到对应的替换规则，则替换；否则保留原内容
         val newName = (replacementMap?.get(oldName) ?: oldName)
 
-        val replacement =Matcher.quoteReplacement("@$resTypeStr/$newName")
+        val replacement = Matcher.quoteReplacement("@$resTypeStr/$newName")
         matcher.appendReplacement(sb, replacement)
     }
     matcher.appendTail(sb)
@@ -187,6 +206,9 @@ fun valueRename(valuePath: String, renameResMap: Map<ResType, Map<OldName, NewNa
             if (renameResMap.containsKey(nameWithoutExtension)) {
                 xmlReplaceName(it.absolutePath, renameResMap[nameWithoutExtension]!!)
             }
+            if (it.name == "styles.xml" && renameResMap.containsKey("attr")) {
+                xmlStylesReplaceItemName(it.absolutePath, renameResMap["attr"]!!)
+            }
         }
     }
 }
@@ -209,10 +231,10 @@ private fun renameFile(rootPath: String, renameMap: Map<OldName, NewName>) {
     }
     File(rootPath).listFiles()?.forEach {
         if (it.isFile) {
-            val name=it.name.substringBefore(".")
-            val end=it.name.substringAfter(".","")
+            val name = it.name.substringBefore(".")
+            val end = it.name.substringAfter(".", "")
             if (renameMap.containsKey(name)) {
-                val newFile = rootPath + "/" + renameMap[name] +"."+ end
+                val newFile = rootPath + "/" + renameMap[name] + "." + end
                 it.renameTo(File(newFile))
             }
         }

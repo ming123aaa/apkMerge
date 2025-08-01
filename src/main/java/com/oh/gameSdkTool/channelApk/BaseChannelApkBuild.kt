@@ -17,11 +17,15 @@ abstract class BaseChannelApkBuild() {
         println("准备smali环境 channelName=${data.channelName} mode=${data.mode}  class=${javaClass}")
         val buildSmaliPath = getBuildSmaliPath(baseApkSmaliPath, buildPath,data)
         println("开始build渠道 channelName=${data.channelName} mode=${data.mode}  class=${javaClass}")
-        val outApk=outPath+"/${data.apkName.ifEmpty { data.channelName }}.apk"
+        val outApk=outPath+"/${getOutFileName(data)}"
         File(outApk).parentMkdirs()
         build(commandArgs,buildSmaliPath,buildPath,outApk, data)
-        println("apk=${outApk} 编译${if (File(outApk).exists()) "成功" else "失败"}")
+        println("output=${outApk} 编译${if (File(outApk).exists()) "成功" else "失败"}")
         return File(outApk).exists()
+    }
+
+    protected  open fun getOutFileName(data: ChannelConfigItemBean):String{
+        return "${data.apkName.ifEmpty { data.channelName }}.apk"
     }
 
     protected abstract fun build(commandArgs:CommandArgs, baseApkSmaliPath:String, buildPath:String, outApkPath:String, data: ChannelConfigItemBean)

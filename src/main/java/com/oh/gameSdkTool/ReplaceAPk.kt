@@ -1,6 +1,7 @@
 package com.oh.gameSdkTool
 
 import com.oh.gameSdkTool.bean.ApkConfigBean
+import com.oh.gameSdkTool.bean.CompileSdkInfo
 import com.oh.gameSdkTool.bean.ReplaceStringData
 import com.ohuang.apkMerge.*
 import com.ohuang.replacePackage.*
@@ -8,8 +9,6 @@ import org.dom4j.Element
 import org.dom4j.dom.DOMElement
 import org.dom4j.io.SAXReader
 import java.io.File
-import java.io.FileWriter
-import java.lang.StringBuilder
 import java.util.TreeSet
 
 object ReplaceAPk {
@@ -19,29 +18,12 @@ object ReplaceAPk {
         println("开始根据ApkConfig修改内容")
         renameRes(rootPath, renameResMap = apkConfigBean.renameResMap)
         changeClassPackage(rootPath, changeClassMap = apkConfigBean.changeClassPackage) //修改class的包名
-        replaceApK(
+        replaceManifestAndYml(
             rootPath = rootPath,
-            packageName = apkConfigBean.packageName,
-            icon = apkConfigBean.iconImgPath,
-            roundIcon = apkConfigBean.iconImgPath,
-            iconSize = apkConfigBean.iconSize,
-            appName = apkConfigBean.appName,
-            versionCode = apkConfigBean.versionCode,
-            versionName = apkConfigBean.versionName,
-            armeabis = apkConfigBean.abiNames,
-            minSdkVersion = apkConfigBean.minSdkVersion,
-            targetSdkVersion = apkConfigBean.targetSdkVersion,
-            metaDataMap = apkConfigBean.metaDataMap,
-            replaceStringManifest = apkConfigBean.replaceStringManifest
+            apkConfigBean = apkConfigBean
         )
-        deleteFileList(rootPath, apkConfigBean.deleteFileList)  //删除指定文件
-        manifestDeleteName(rootPath + AndroidManifest, apkConfigBean.deleteManifestNodeNames)//删除AndroidManifest 指定节点
-        deleteSmaliPath(rootPath, apkConfigBean.deleteSmaliPaths) //删除smali文件
-        if (apkConfigBean.isDeleteSameNameSmali) {
-            deleteSameNameSmali(rootPath)//删除相同名称smali
-        }
-        deleteEmpty_smali_class_Dir(rootPath)//删除空的smali_classes文件夹
-        limitMaxSize_smali_class_Dir(rootPath,apkConfigBean.smaliClassSizeMB) //限制单个smali_classes文件夹大小
+        replaceDeleteFile(rootPath,apkConfigBean) //删除指定文件
+        limitMaxSize_smali_class_Dir(rootPath, apkConfigBean.smaliClassSizeMB) //限制单个smali_classes文件夹大小
         if (apkConfigBean.isOptimizeSmaliClass) {
             limitDex_smali_class_Dir(rootPath) //限制65535
         }
@@ -49,12 +31,22 @@ object ReplaceAPk {
 
     }
 
+    private fun replaceDeleteFile(rootPath: String, apkConfigBean: ApkConfigBean){
+        deleteFileList(rootPath, apkConfigBean.deleteFileList)  //删除指定文件
+        deleteAbi("$rootPath/lib", apkConfigBean.abiNames) //删除指定abi的so文件
+        deleteSmaliPath(rootPath, apkConfigBean.deleteSmaliPaths) //删除smali文件
+        if (apkConfigBean.isDeleteSameNameSmali) {
+            deleteSameNameSmali(rootPath)//删除相同名称smali
+        }
+        deleteEmpty_smali_class_Dir(rootPath)//删除空的smali_classes文件夹
+    }
+
 
     private fun deleteFileList(rootPath: String, list: List<String>) {
         val rootFile = File(rootPath)
         val rootAbsolutePath = rootFile.absolutePath
         list.forEach { path ->
-            if (path.isEmpty()){
+            if (path.isEmpty()) {
                 return@forEach
             }
             var realPath = if (path.startsWith("/")) {
@@ -62,7 +54,7 @@ object ReplaceAPk {
             } else {
                 "/$path"
             }
-            val file = File(rootAbsolutePath+realPath)
+            val file = File(rootAbsolutePath + realPath)
             if (file.exists()) {
                 println("删除文件-" + file.absolutePath)
                 FileUtils.delete(file)
@@ -72,46 +64,25 @@ object ReplaceAPk {
     }
 
 
-    /**
-     * 改包名 图标 应用名
-     * iconSize  -xxhdpi
-     */
-    private fun replaceApK(
+
+    private fun replaceManifestAndYml(
         rootPath: String,
-        packageName: String,
-        icon: String,
-        roundIcon: String,
-        iconSize: String = "-xxhdpi",
-        appName: String,
-        versionCode: String,
-        versionName: String,
-        minSdkVersion: String,
-        targetSdkVersion: String,
-        armeabis: List<String>,
-        metaDataMap: Map<String, String>,
-        replaceStringManifest: List<ReplaceStringData>
+        apkConfigBean: ApkConfigBean
     ) {
-        deleteAbi("$rootPath/lib", armeabis)
+
+        manifestDeleteName(rootPath + AndroidManifest, apkConfigBean.deleteManifestNodeNames)//删除AndroidManifest 指定节点
+        manifestSetAttributeByName(rootPath+AndroidManifest, apkConfigBean.manifestNodeSetAttributeMapByName) //设置AndroidManifest节点属性
         replaceManifest(
             rootPath,
-            packageName,
-            versionCode,
-            versionName,
-            roundIcon,
-            iconSize,
-            icon,
-            appName,
-            minSdkVersion,
-            targetSdkVersion,
-            metaDataMap
+            apkConfigBean = apkConfigBean
         )
-        replaceStringManifest(rootPath, replaceStringManifest)
+        replaceStringManifest(rootPath, apkConfigBean.replaceStringManifest)
         replaceApktoolYml(
             ymlFilePath = "$rootPath/apktool.yml",
-            versionCode = versionCode,
-            versionName = versionName,
-            minSdkVersion = minSdkVersion,
-            targetSdkVersion = targetSdkVersion
+            versionCode = apkConfigBean.versionCode,
+            versionName = apkConfigBean.versionName,
+            minSdkVersion = apkConfigBean.minSdkVersion,
+            targetSdkVersion = apkConfigBean.targetSdkVersion
         )
     }
 
@@ -162,16 +133,7 @@ object ReplaceAPk {
 
     private fun replaceManifest(
         rootPath: String,
-        packageName: String,
-        versionCode: String,
-        versionName: String,
-        roundIcon: String,
-        iconSize: String,
-        icon: String,
-        appName: String,
-        minSdkVersion: String,
-        targetSdkVersion: String,
-        metaDataMap: Map<String, String>,
+        apkConfigBean: ApkConfigBean
     ) {
 
         val path2 = "$rootPath/AndroidManifest.xml"
@@ -179,14 +141,33 @@ object ReplaceAPk {
             return
         }
         val saxReader2 = SAXReader()
-        val read2 = saxReader2.read(path2)
+        val read2 = saxReader2.readSafe(path2)
         val rootElement2 = read2.rootElement
         val applictionElement2 = getOrAddApplictionElement(rootElement2)
-        replacePackage(rootElement2, packageName, applictionElement2)
-        replaceVersion(versionCode, rootElement2, versionName, minSdkVersion, targetSdkVersion)
-        replaceMetaData(applictionElement2, metaDataMap)
-        replaceIcon(applictionElement2, roundIcon, iconSize, rootPath, icon)
-        replaceAppName(appName, applictionElement2, rootPath)
+        replacePackage(rootElement2, apkConfigBean.packageName, applictionElement2)
+
+        replaceCompileSdkInfo(rootElement2, apkConfigBean.compileSdkInfo)
+        replaceVersion(
+            apkConfigBean.versionCode,
+            rootElement2,
+            apkConfigBean.versionName,
+            apkConfigBean.minSdkVersion,
+            apkConfigBean.targetSdkVersion
+        )
+        replaceMetaData(applictionElement2, apkConfigBean.metaDataMap)
+        replaceIcon(
+            applictionElement2,
+            apkConfigBean.iconImgPath,
+            apkConfigBean.iconSize,
+            rootPath,
+            apkConfigBean.iconImgPath
+        )
+        replaceAppName(apkConfigBean.appName, applictionElement2, rootPath)
+        apkConfigBean.applicationSetAttributeMap.forEach{name,value->
+            if (name.isNotEmpty()) {
+                applictionElement2.setAndroidAttribute(name, value)
+            }
+        }
         saveXml(path2, read2)
     }
 
@@ -195,11 +176,11 @@ object ReplaceAPk {
             return
         }
         val keySet = TreeSet<String>()
-        applictionElement2?.elements()?.forEach {
+        applictionElement2?.elements()?.toList()?.forEach {
             if (it.name.equals("meta-data")) {
                 val name = it.attribute("name").data as String
                 if (metaDataMap.containsKey(name)) {
-                    it.setAttributeValue("value", metaDataMap[name])
+                    it.setAndroidAttribute("value", metaDataMap[name])
                     keySet.add(name)
                 }
             }
@@ -215,6 +196,50 @@ object ReplaceAPk {
 
     }
 
+    private fun replaceCompileSdkInfo(rootElement2: Element, compileSdkInfo: CompileSdkInfo) {
+        if (compileSdkInfo.compileSdkVersion.isNotEmpty()) {
+            rootElement2.setAndroidAttribute("compileSdkVersion", compileSdkInfo.compileSdkVersion)
+        }
+        if (compileSdkInfo.compileSdkVersionCodename.isNotEmpty()) {
+            rootElement2.setAndroidAttribute("compileSdkVersionCodename", compileSdkInfo.compileSdkVersionCodename)
+        }
+
+        if (compileSdkInfo.platformBuildVersionCode.isNotEmpty()) {
+            rootElement2.setNameAttribute(
+                name = "platformBuildVersionCode",
+                value = compileSdkInfo.platformBuildVersionCode
+            )
+
+        }
+
+        if (compileSdkInfo.platformBuildVersionName.isNotEmpty()) {
+            rootElement2.setNameAttribute(
+                name = "platformBuildVersionName",
+                value = compileSdkInfo.platformBuildVersionName
+            )
+        }
+    }
+
+    fun Element.setAndroidAttribute(name: String, value: String?) {
+        setNameAttribute(nameSpace = "android", name = name, value = value)
+    }
+
+    fun Element.setNameAttribute( name: String, value: String?,nameSpace: String = "") {
+        if (value == null) {
+            return
+        }
+        var attribute = this.attribute(name)
+        if (attribute == null) {
+            if (nameSpace.isEmpty()) {
+                this.addAttribute(name, value)
+            } else {
+                this.addAttribute("$nameSpace:$name", value)
+            }
+        } else {
+            attribute.data = value
+        }
+    }
+
     private fun replaceVersion(
         versionCode: String,
         rootElement2: Element,
@@ -223,26 +248,40 @@ object ReplaceAPk {
         targetSdkVersion: String
     ) {
         if (versionCode.isNotEmpty()) {
-            rootElement2.addAttribute("android:versionCode", versionCode)
+            rootElement2.setAndroidAttribute("versionCode", versionCode)
         }
         if (versionName.isNotEmpty()) {
-            rootElement2.addAttribute("android:versionName", versionName)
+            rootElement2.setAndroidAttribute("versionName", versionName)
         }
         if (minSdkVersion.isNotEmpty() || targetSdkVersion.isNotEmpty()) {
+            println("replaceVersion----minSdkVersion:$minSdkVersion  targetSdkVersion:$targetSdkVersion")
+            if (minSdkVersion.isEmpty() || targetSdkVersion.isEmpty()) {
+                println("replaceVersion------warn: minSdkVersion or targetSdkVersion is empty")
+            }
+
             var isChangeSdkVersion = false
             rootElement2.elements().forEach {
                 if (it.name.equals("uses-sdk")) {
-                    it.addAttribute("android:minSdkVersion", minSdkVersion)
-                    it.addAttribute("android:targetSdkVersion", targetSdkVersion)
+                    if (minSdkVersion.isNotEmpty()) {
+                        it.setAndroidAttribute("minSdkVersion", minSdkVersion)
+                    }
+                    if (targetSdkVersion.isNotEmpty()) {
+                        it.setAndroidAttribute("targetSdkVersion", targetSdkVersion)
+                    }
                     isChangeSdkVersion = true
                 }
             }
             if (!isChangeSdkVersion) {
                 val domElement = DOMElement("uses-sdk")
-                domElement.addAttribute("android:minSdkVersion", minSdkVersion)
-                domElement.addAttribute("android:targetSdkVersion", targetSdkVersion)
+                if (minSdkVersion.isNotEmpty()) {
+                    domElement.setAndroidAttribute("minSdkVersion", minSdkVersion)
+                }
+                if (targetSdkVersion.isNotEmpty()) {
+                    domElement.setAndroidAttribute("targetSdkVersion", targetSdkVersion)
+                }
                 rootElement2.add(domElement)
             }
+
         }
     }
 
@@ -253,26 +292,32 @@ object ReplaceAPk {
     ) {
         val packge = rootElement2.attribute("package").data as String
         if (packageName.isNotEmpty()) {  //包名替换
-            rootElement2.setAttributeValue("package", packageName)
+            rootElement2.setNameAttribute(name = "package", value = packageName)
             rootElement2.elements().forEach {
                 if (it.name.equals("uses-permission") || it.name.equals("permission")) {
-                    val data = it.attribute("name").data as String
-                    val replace = data.replace(packge, packageName)
-                    it.setAttributeValue("name", replace)
+                    tryCatch(false) {
+                        val data = it.attribute("name").data as String
+                        val replace = data.replace(packge, packageName)
+                        it.setAndroidAttribute("name", replace)
+                    }
                 }
 
             }
             applictionElement2.elements().forEach { appChild ->
                 if (appChild.name.equals("provider")) {
-                    val data = appChild.attribute("authorities").data as String
-                    val replace = data.replace(packge, packageName)
-                    appChild.setAttributeValue("authorities", replace)
+                    tryCatch(false) {
+                        var attribute = appChild.attribute("authorities")
+                        val data = attribute.data as String
+                        val replace = data.replace(packge, packageName)
+                        appChild.setAndroidAttribute("authorities", replace)
+                    }
                 }
                 if (appChild.name.equals("activity")) {
                     tryCatch(false) {
-                        val data = appChild.attribute("taskAffinity").data as String
+                        var attribute = appChild.attribute("taskAffinity")
+                        val data = attribute.data as String
                         val replace = data.replace(packge, packageName)
-                        appChild.setAttributeValue("taskAffinity", replace)
+                        appChild.setAndroidAttribute("taskAffinity", replace)
                     }
                 }
             }
@@ -290,7 +335,7 @@ object ReplaceAPk {
                         changeAppName("$rootPath/res", split[1], appName)
                     }
                 } else {
-                    applictionElement2.setAttributeValue("label", appName)
+                    applictionElement2.setAndroidAttribute("label", appName)
                 }
             }
 
@@ -384,10 +429,10 @@ object ReplaceAPk {
         tryCatch {
             val path2 = "$rootPath/AndroidManifest.xml"
             val saxReader2 = SAXReader()
-            val read2 = saxReader2.read(path2)
+            val read2 = saxReader2.readSafe(path2)
             val rootElement2 = read2.rootElement
             val applictionElement2 = rootElement2.element("application")
-            applictionElement2.setAttributeValue("extractNativeLibs", "true")
+            applictionElement2.setAndroidAttribute("extractNativeLibs", "true")
             saveXml(path2, read2)
         }
 

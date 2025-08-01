@@ -1,5 +1,6 @@
 package com.ohuang.apkMerge
 
+import com.oh.gameSdkTool.ReplaceAPk.setAndroidAttribute
 import com.oh.gameSdkTool.config.GlobalConfig
 import com.ohuang.replacePackage.copyFile
 import org.dom4j.Attribute
@@ -31,7 +32,10 @@ fun getManifestPackage(path: String): String? {
  *  path 合并到mainPath   mainPath内容在前
  *
  */
-@Deprecated(message = "请使用mergeSafeManifest", replaceWith = ReplaceWith(expression = "mergeSafeManifest(path=path,mainPath=mainPath,outPath=outPath)"))
+@Deprecated(
+    message = "请使用mergeSafeManifest",
+    replaceWith = ReplaceWith(expression = "mergeSafeManifest(path=path,mainPath=mainPath,outPath=outPath)")
+)
 fun mergeManifest(path: String, mainPath: String, outPath: String = mainPath) {
     if (!File(path).exists() || !File(mainPath).exists()) {
         if (File(path).exists()) {
@@ -47,7 +51,7 @@ fun mergeManifest(path: String, mainPath: String, outPath: String = mainPath) {
 
 
     val saxReader2 = SAXReader()
-    val read2 = saxReader2.read(mainPath)
+    val read2 = saxReader2.readSafe(mainPath)
     val rootElement2 = read2.rootElement
 
     val packge = rootElement.attribute("package").data as String
@@ -62,19 +66,19 @@ fun mergeManifest(path: String, mainPath: String, outPath: String = mainPath) {
                     tryCatch(false) {
                         var data = createCopy.attribute("authorities").data as String
                         var replace = data.replace(packge, packge2)
-                        createCopy.setAttributeValue("authorities", replace)
+                        createCopy.setAndroidAttribute("authorities", replace)
                     }
                 } else if (createCopy.name.equals("activity")) {
                     tryCatch(false) {
                         var data = createCopy.attribute("taskAffinity").data as String
                         var replace = data.replace(packge, packge2)
-                        createCopy.setAttributeValue("taskAffinity", replace)
+                        createCopy.setAndroidAttribute("taskAffinity", replace)
                     }
                 }
                 applictionElement2.add(createCopy)
             }
-            var attributes = applictionElement2.attributes()
-            it.attributes()?.forEach { att ->
+            var attributes = applictionElement2.attributes().toMutableList()
+            it.attributes()?.toList()?.forEach { att ->
                 tryCatch({
                     val attribute = applictionElement2.attribute(att.name)
                     var data = attribute.data
@@ -90,7 +94,7 @@ fun mergeManifest(path: String, mainPath: String, outPath: String = mainPath) {
             if (it.name.equals("uses-permission") || it.name.equals("permission")) {
                 var data = createCopy.attribute("name").data as String
                 var replace = data.replace(packge, packge2)
-                createCopy.setAttributeValue("name", replace)
+                createCopy.setAndroidAttribute("name", replace)
             }
             rootElement2.add(createCopy)
         }
@@ -100,13 +104,16 @@ fun mergeManifest(path: String, mainPath: String, outPath: String = mainPath) {
     saveXml(outPath, read2)
 }
 
- fun getOrAddApplictionElement(rootElement2: Element): Element = runCatching {
+fun getOrAddApplictionElement(rootElement2: Element): Element = runCatching {
     return@runCatching rootElement2.element("application")
 }.getOrNull() ?: run {
     val createElement = rootElement2.addElement("application")
     createElement
 }
 
+/**
+ * 根据name删除节点
+ */
 fun manifestDeleteName(manifestPath: String, deleteNames: Set<String>) {
     if (!File(manifestPath).exists() || deleteNames.isEmpty()) {
         return
@@ -124,10 +131,47 @@ fun manifestDeleteName(manifestPath: String, deleteNames: Set<String>) {
     }
 }
 
+/**
+ * 修改指定name的attribute
+ */
+fun manifestSetAttributeByName(manifestPath: String, attributeMap: Map<String, Map<String, String>>) {
+    if (!File(manifestPath).exists() || attributeMap.isEmpty()) {
+        return
+    }
+    tryCatch {
+        val saxReader = SAXReader()
+        val read = saxReader.readSafe(manifestPath)
+        val rootElement = read.rootElement
+        setAttributeChildElement(rootElement, attributeMap)
+        tryCatch(false) {
+            val applicationElement = rootElement.element("application")
+            setAttributeChildElement(applicationElement, attributeMap)
+        }
+        saveXml(manifestPath, read)
+    }
+}
+
+private fun setAttributeChildElement(
+    rootElement: Element, attributeMap: Map<String, Map<String, String>>
+) {
+    rootElement.elements().toList().forEach { child ->
+        tryCatch(false) {
+            val name = child.attribute("name").data as String
+            if (name.isNotEmpty() && attributeMap.containsKey(name)) {
+                val attributeMap = attributeMap[name]
+                attributeMap?.forEach {
+                    if (it.key.isNotEmpty()) {
+                        child.setAndroidAttribute(it.key, it.value)
+                    }
+                }
+            }
+        }
+    }
+}
 
 private fun deleteChildElement(rootElement: Element, deleteNames: Set<String>) {
     val removeAppElement = mutableListOf<Element>()
-    rootElement.elements().forEach { child ->
+    rootElement.elements().toList().forEach { child ->
         tryCatch(false) {
             val nodeTye = child.name
             val name = child.attribute("name").data as String
@@ -145,18 +189,50 @@ private fun deleteChildElement(rootElement: Element, deleteNames: Set<String>) {
 }
 
 /**
+ * 将application theme设置到 没有设置theme的activity 中
+ */
+fun setActivityAppTheme(manifestPath: String) {
+    if (!File(manifestPath).exists()) {
+        return
+    }
+    tryCatch(GlobalConfig.isLog) {
+        val saxReader = SAXReader()
+        val read = saxReader.readSafe(manifestPath)
+        val application = read.rootElement.element("application")
+        if (application == null) {
+            return
+        }
+        var applicationAttributeTheme = application.attribute("theme")
+        if (applicationAttributeTheme == null) {
+            return
+        }
+        application.elements().toList().forEach { child ->
+            if (child.name.equals("activity") || child.name.equals("activity-alias")) {
+                tryCatch {
+                    var attribute = child.attribute("theme")
+                    if (attribute== null){
+                        child.addAttribute(applicationAttributeTheme.qualifiedName, applicationAttributeTheme.value)
+                    }
+                }
+            }
+        }
+    }
+}
+
+/**
  * path 合并到mainPath   mainPath内容在前
  * 更安全的合并  重复的数据不会被覆盖
  */
 fun mergeSafeManifest(
-    path: String,
+    channelPath: String,
     mainPath: String,
     outPath: String = mainPath,
-    isReplaceApplication: Boolean = false
-) {
-    if (!File(path).exists() || !File(mainPath).exists()) {
-        if (File(path).exists()) {
-            copyFile(path, outPath)
+    isReplaceApplication: Boolean = false,
+
+    ) {
+    if (!File(channelPath).exists() || !File(mainPath).exists()) {
+        if (File(channelPath).exists()) {
+            copyFile(channelPath, outPath)
         } else if (File(mainPath).exists()) {
             copyFile(mainPath, outPath)
         }
@@ -164,16 +240,16 @@ fun mergeSafeManifest(
     }
     tryCatch {
         val saxReader = SAXReader()
-        val read = saxReader.readSafe(path)
-        val rootElement = read.rootElement
-        val packge = rootElement.attribute("package").data as String
+        val read = saxReader.readSafe(channelPath)
+        val channelRootElement = read.rootElement
+        val channelPackge = channelRootElement.attribute("package").data as String
         val saxReader2 = SAXReader()
-        val read2 = saxReader2.read(mainPath)
-        val rootElement2 = read2.rootElement
-        val applictionElement2 = getOrAddApplictionElement(rootElement2)
-        var packge2 = packge
+        val read2 = saxReader2.readSafe(mainPath)
+        val mainRootElement = read2.rootElement
+        val applictionElement2 = getOrAddApplictionElement(mainRootElement)
+        var mainPackge = channelPackge
         tryCatch {
-            packge2 = rootElement2.attribute("package").data as String
+            mainPackge = mainRootElement.attribute("package").data as String
         }
 
 
@@ -187,13 +263,13 @@ fun mergeSafeManifest(
             }
         }
 
-        rootElement.elements().forEach {
+        channelRootElement.elements().forEach {
             if (it.name.equals("application")) {
                 copyApplicationElement(
                     it,
                     existElementMap,
-                    packge,
-                    packge2,
+                    channelPackge,
+                    mainPackge,
                     applictionElement2,
                     isReplaceApplication
                 )
@@ -202,27 +278,29 @@ fun mergeSafeManifest(
                     val createCopy = it.createCopy()
                     if (it.name.equals("uses-permission") || it.name.equals("permission")) {
                         val data = createCopy.attribute("name").data as String
-                        val replace = data.replace(packge, packge2)
-                        createCopy.setAttributeValue("name", replace)
+                        val replace = data.replace(channelPackge, mainPackge)
+                        createCopy.setAndroidAttribute("name", replace)
                     }
-                    rootElement2.add(createCopy)
+                    mainRootElement.add(createCopy)
                 }
             }
         }
-        rootElement2.remove(applictionElement2)
-        rootElement2.add(applictionElement2)
+        mainRootElement.remove(applictionElement2)
+        mainRootElement.add(applictionElement2)
         saveXml(outPath, read2)
     }
 }
 
 private fun copyApplicationElement(
-    appliction: Element,
+    channelAppliction: Element,
     existElementMap: HashMap<String, Boolean>,
-    packge: String,
-    packge2: String,
+    channelPackge: String,
+    mainPackge: String,
     mainApplictionElement: Element, isReplaceApplication: Boolean
 ) {
-    appliction.elements().forEach aa@{ appe ->
+
+
+    channelAppliction.elements().forEach aa@{ appe ->
         tryCatch {
             val name = appe.attribute("name").data as String
             if (name.isNotEmpty()) {
@@ -237,22 +315,22 @@ private fun copyApplicationElement(
         if (createCopy.name.equals("provider")) {
             tryCatch(GlobalConfig.isLog) {
                 val data = createCopy.attribute("authorities").data as String
-                val replace = data.replace(packge, packge2)
-                createCopy.setAttributeValue("authorities", replace)
+                val replace = data.replace(channelPackge, mainPackge)
+                createCopy.setAndroidAttribute("authorities", replace)
             }
-        } else if (createCopy.name.equals("activity")) {
+        } else if (createCopy.name.equals("activity") || createCopy.name.equals("activity-alias")) {
             tryCatch(GlobalConfig.isLog) {
                 val data = createCopy.attribute("taskAffinity").data as String
-                val replace = data.replace(packge, packge2)
-                createCopy.setAttributeValue("taskAffinity", replace)
+                val replace = data.replace(channelPackge, mainPackge)
+                createCopy.setAndroidAttribute("taskAffinity", replace)
             }
         }
         mainApplictionElement.add(createCopy)
     }
 
 
-    val attributes = mainApplictionElement.attributes()
-    appliction.attributes()?.forEach { att ->  //把application没有的属性加上
+    val attributes = mainApplictionElement.attributes().toMutableList()
+    channelAppliction.attributes()?.toList()?.forEach { att ->  //把application没有的属性加上
         tryCatch({
             val attribute = mainApplictionElement.attribute(att.name)
             var data = attribute.data
@@ -265,11 +343,11 @@ private fun copyApplicationElement(
     mainApplictionElement.setAttributes(attributes)
     if (isReplaceApplication) {
         tryCatch(GlobalConfig.isLog) {
-            val attribute = appliction.attribute("name")
+            val attribute = channelAppliction.attribute("name")
             val applicationName = attribute.data as String
             println("applicationName 替换成 $applicationName")
             if (applicationName.isNotEmpty()) {
-                mainApplictionElement.setAttributeValue("name", applicationName)
+                mainApplictionElement.setAndroidAttribute("name", applicationName)
             }
         }
     }
@@ -431,7 +509,7 @@ private fun setReplaceLauncherActivity(path: String, activityName: String): Bool
                         val name = it.attribute("name").data as String
                         if ("Launcher_Activity_Name" == name) {
                             hasReplaceLauncherActivity = true
-                            it.setAttributeValue("value", activityName)
+                            it.setAndroidAttribute("value", activityName)
                         }
                     }
 

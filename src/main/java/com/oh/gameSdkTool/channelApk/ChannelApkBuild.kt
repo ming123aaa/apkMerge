@@ -67,6 +67,12 @@ object ChannelApkBuild {
             MODE_MERGE -> MergeChannelApkBuild()
             MODE_LIST->MergeListChannelApkBuild()
             MODE_MERGE_Reverse->MergeReverseChannelApkBuild()
+            MODE_CHANGE->{
+                ChangeChannelApkBuild()
+            }
+            MODE_DECOMPILE->{
+                DecompileChannelApkBuild()
+            }
             else -> {
                 SkipChannelApkBuild()
             }

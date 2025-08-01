@@ -37,9 +37,10 @@ class SimpleFastChannelApkBuild : BaseChannelApkBuild() {
     override fun getBuildSmaliPath(baseSmali: String, buildPath: String, data: ChannelConfigItemBean): String {
         val smali = "$buildPath/$fastDir/baseSmali"
         val androidXml = "$buildPath/$fastDir/baseSmali/AndroidManifest.xml"
+        val apkToolyaml = "$buildPath/$fastDir/baseSmali/apktool.yml"
         if (File(smali).exists()) {
             FileUtils.writeText(File(androidXml),FileUtils.readText("$baseSmali/AndroidManifest.xml"))
-//            copyPathAllFile(sourceRootPath= "$baseSmali/AndroidManifest.xml", targetRootPath = androidXml, isCover = true)
+            FileUtils.writeText(File(apkToolyaml),FileUtils.readText("$baseSmali/apktool.yml"))
         } else {
             copyPathAllFile(sourceRootPath = baseSmali, targetRootPath = smali)
         }

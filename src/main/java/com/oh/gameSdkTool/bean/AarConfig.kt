@@ -20,6 +20,8 @@ class AarConfig {
     var smaliClassSizeMB: Double =
         30.0 //限制smaliClass文件的大小,避免方法数量超出限制无法打包,推荐值30MB， 只有 maxMB >= 1.0 && maxMB <= 1000 生效
     var isOptimizeSmaliClass: Boolean = true
+    var applicationSetAttributeMap: Map<String, String> = TreeMap<String, String>() // application节点的属性修改
+    var manifestNodeSetAttributeMapByName: Map<String, Map<String, String>> = TreeMap<String, Map<String, String>>() // 根据name修改的AndroidManifest.xml对应的节点的属性
 }
 
 data class AarConfigData(
@@ -35,7 +37,9 @@ data class AarConfigData(
     var deleteSmaliPaths: List<String>, //需要删除的smail的文件   com/google   com/xxx/R.smali
     var isDeleteSameNameSmali: Boolean,  //是否删除相同名称的smali文件
     var deleteManifestNodeNames: Set<String>, //根据name删除的AndroidManifest.xml对应的节点)
-    var isOptimizeSmaliClass: Boolean
+    var isOptimizeSmaliClass: Boolean,
+    var applicationSetAttributeMap: Map<String, String> ,// application节点的属性修改
+    var manifestNodeSetAttributeMapByName: Map<String, Map<String, String>>  // 根据name修改的AndroidManifest.xml对应的节点的属性
 )
 
 fun AarConfigData.toApkConfig(): ApkConfigBean {
@@ -57,7 +61,10 @@ fun AarConfigData.toApkConfig(): ApkConfigBean {
         deleteSmaliPaths = deleteSmaliPaths,
         isDeleteSameNameSmali = isDeleteSameNameSmali,
         deleteManifestNodeNames = deleteManifestNodeNames,
-        smaliClassSizeMB = smaliClassSizeMB, isOptimizeSmaliClass = isOptimizeSmaliClass
+        smaliClassSizeMB = smaliClassSizeMB, isOptimizeSmaliClass = isOptimizeSmaliClass,
+        compileSdkInfo= CompileSdkInfo(),
+        applicationSetAttributeMap = applicationSetAttributeMap,
+        manifestNodeSetAttributeMapByName = manifestNodeSetAttributeMapByName
     )
 }
 
@@ -86,6 +93,8 @@ private fun createAarConfigData(path: String): AarConfigData {
         isDeleteSameNameSmali = fromJson.isDeleteSameNameSmali,
         deleteManifestNodeNames = fromJson.deleteManifestNodeNames,
         smaliClassSizeMB = fromJson.smaliClassSizeMB,
-        isOptimizeSmaliClass = fromJson.isOptimizeSmaliClass
+        isOptimizeSmaliClass = fromJson.isOptimizeSmaliClass,
+        applicationSetAttributeMap = fromJson.applicationSetAttributeMap,
+        manifestNodeSetAttributeMapByName = fromJson.manifestNodeSetAttributeMapByName
     )
 }
