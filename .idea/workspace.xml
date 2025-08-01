@@ -9,9 +9,11 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4eaafb40-8131-4eac-be98-0f0811b2834e" name="Changes" comment="feat(channelApk): 新增 change 和 decompile 模式&#10;&#10;- 新增 ChangeChannelApkBuild 和 DecompileChannelApkBuild 类实现新的构建模式&#10;- 在 ChannelConfig 中添加 MODE_CHANGE 和 MODE_DECOMPILE 常量&#10;- 修改 CommandArgs 类，增加相关参数支持&#10;- 更新 MergeApk.kt 中的 mergeApk 函数，支持新的模式&#10;- 优化 AndroidManifestUtil 中的函数，提高 AndroidManifest.xml 处理能力">
+    <list default="true" id="4eaafb40-8131-4eac-be98-0f0811b2834e" name="Changes" comment="fix(apkMerge): 修复 AndroidManifest.xml 处理异常&#10;&#10;&#10;- 修复keepActivityTheme命令不生效问题">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/AndroidManifestUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/AndroidManifestUtil.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/MergeApk.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/MergeApk.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -390,7 +392,15 @@
       <option name="project" value="LOCAL" />
       <updated>1754025825736</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="fix(apkMerge): 修复 AndroidManifest.xml 处理异常&#10;&#10;&#10;- 修复keepActivityTheme命令不生效问题">
+      <option name="closed" value="true" />
+      <created>1754027552686</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1754027552686</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -438,6 +448,7 @@
     <MESSAGE value="feat(toolbox): 添加 Smali信息查看功能&#10;&#10;- 新增 SmaliInfoRun 类，用于显示 Smali 信息&#10;- 修改 ArgsRunTime 和 CommandArgs，增加 Smali 信息查看相关参数&#10;-优化 Smali_ClassesUtil 中的 Smali 信息获取逻辑" />
     <MESSAGE value="feat(toolbox): 添加 CmdWriteLogRun 功能&#10;&#10;- 新增 CmdWriteLogRun 类，用于调用命令并输出日志&#10;- 修改 ArgsRunTime 和 CommandArgs，增加 CmdWriteLog 相关参数- 优化 ExecUtil 类，支持异步读取命令输出&#10;- 更新 ReplaceAPk 和 Smali_ClassesUtil，增加优化 Smali 文件功能" />
     <MESSAGE value="feat(channelApk): 新增 change 和 decompile 模式&#10;&#10;- 新增 ChangeChannelApkBuild 和 DecompileChannelApkBuild 类实现新的构建模式&#10;- 在 ChannelConfig 中添加 MODE_CHANGE 和 MODE_DECOMPILE 常量&#10;- 修改 CommandArgs 类，增加相关参数支持&#10;- 更新 MergeApk.kt 中的 mergeApk 函数，支持新的模式&#10;- 优化 AndroidManifestUtil 中的函数，提高 AndroidManifest.xml 处理能力" />
-    <option name="LAST_COMMIT_MESSAGE" value="feat(channelApk): 新增 change 和 decompile 模式&#10;&#10;- 新增 ChangeChannelApkBuild 和 DecompileChannelApkBuild 类实现新的构建模式&#10;- 在 ChannelConfig 中添加 MODE_CHANGE 和 MODE_DECOMPILE 常量&#10;- 修改 CommandArgs 类，增加相关参数支持&#10;- 更新 MergeApk.kt 中的 mergeApk 函数，支持新的模式&#10;- 优化 AndroidManifestUtil 中的函数，提高 AndroidManifest.xml 处理能力" />
+    <MESSAGE value="fix(apkMerge): 修复 AndroidManifest.xml 处理异常&#10;&#10;&#10;- 修复keepActivityTheme命令不生效问题" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix(apkMerge): 修复 AndroidManifest.xml 处理异常&#10;&#10;&#10;- 修复keepActivityTheme命令不生效问题" />
   </component>
 </project>

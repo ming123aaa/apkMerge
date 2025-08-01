@@ -127,7 +127,7 @@ private fun mergeApk(
         isChangeNotRSmali = isChangeNotRSmali
     )
     println("---合并AndroidManifest.xml---")
-
+    preMergeSaveApplicationName("$baseSmali/AndroidManifest.xml", "$channelSmali/AndroidManifest.xml")
     if (isUseChannelFileManifest) {
         preMergeManifestSetLauncherActivity("$baseSmali/AndroidManifest.xml", "$channelSmali/AndroidManifest.xml")
         if (isKeepActivityTheme) {
@@ -146,6 +146,7 @@ private fun mergeApk(
         }
         mergeSafeManifest(
             "$channelSmali/AndroidManifest.xml",
+            "$baseSmali/AndroidManifest.xml",
             "$baseSmali/AndroidManifest.xml",
             isReplaceApplication = isReplaceApplication
         )

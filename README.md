@@ -49,14 +49,19 @@ java -jar gameSdkTool.jar -h
 
 ## ChannelConfig.json
 [ChannelConfig.kt](src/main/java/com/oh/gameSdkTool/bean/ChannelConfig.kt)
+## 合并时application只能有一个
 
+<meta-data
+android:name="Application_Name"
+android:value="" />
+合并后Application_Name会记录application,多个application会用,分割
 
 ## 合并时替换启动activity
 如果合并的其中一个AndroidManifest.xml存在以下节点
  <meta-data
 android:name="Launcher_Activity_Name"
 android:value="" />
-就代表会删除另一个AndroidManifest.xml的中启动activity（android.intent.category.LAUNCHER） , 且android:value的值也会被替换成删除的activity类名
+就代表会删除另一个AndroidManifest.xml的中启动activity（android.intent.category.LAUNCHER） , 且android:value的值也会被替换成删除的activity类名(多个activity会用,隔开)
 
 
 ## 合并前修改内容

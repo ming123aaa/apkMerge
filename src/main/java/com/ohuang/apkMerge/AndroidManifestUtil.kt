@@ -5,6 +5,7 @@ import com.oh.gameSdkTool.config.GlobalConfig
 import com.ohuang.replacePackage.copyFile
 import org.dom4j.Attribute
 import org.dom4j.Element
+import org.dom4j.dom.DOMElement
 import org.dom4j.io.SAXReader
 import java.io.File
 import kotlin.collections.set
@@ -210,7 +211,7 @@ fun setActivityAppTheme(manifestPath: String) {
             if (child.name.equals("activity") || child.name.equals("activity-alias")) {
                 tryCatch {
                     var attribute = child.attribute("theme")
-                    if (attribute== null){
+                    if (attribute == null) {
                         child.addAttribute(applicationAttributeTheme.qualifiedName, applicationAttributeTheme.value)
                     }
                 }
@@ -370,55 +371,149 @@ fun preMergeManifestSetLauncherActivity(path: String, mainPath: String) {
     tryCatch {
         if (hasReplaceLauncherActivity(mainPath)) {
             println("需要修改Launcher_Activity_Name  path=$mainPath")
-            val findAndDeleteLauncherActivity = findAndDeleteLauncherActivity(path)
+            val findAndDeleteLauncherActivity = findAndDeleteLauncherActivitys(path)
             println("Launcher_Activity_Name=$findAndDeleteLauncherActivity  path=$path")
             if (findAndDeleteLauncherActivity.isNotEmpty()) {
                 setReplaceLauncherActivity(mainPath, findAndDeleteLauncherActivity)
             }
         } else if (hasReplaceLauncherActivity(path)) {
             println("需要修改Launcher_Activity_Name path=$path")
-            val findAndDeleteLauncherActivity = findAndDeleteLauncherActivity(mainPath)
+            val findAndDeleteLauncherActivity = findAndDeleteLauncherActivitys(mainPath)
             println("Launcher_Activity_Name=$findAndDeleteLauncherActivity  path=$mainPath")
             if (findAndDeleteLauncherActivity.isNotEmpty()) {
                 setReplaceLauncherActivity(path, findAndDeleteLauncherActivity)
             }
         }
     }
-
 }
+
+/**
+ *  合并前记录application
+ *  <meta-data
+ * android:name="Application_Name"
+ * android:value="" />
+ */
+fun preMergeSaveApplicationName(path: String, mainPath: String) {
+    var applications = LinkedHashSet<String>()
+    var set0 = findApplication_Name(path)
+    var set1 = findApplication_Name(mainPath)
+    applications.addAll(set0)
+    applications.addAll(set1)
+    setApplication_Name(path, applications)
+    setApplication_Name(mainPath, applications)
+}
+
+private const val Application_Name = "Application_Name"
+
+private fun setApplication_Name(path: String, set: Set<String>) {
+    var readXml = readXml(path)
+    val rootElement = readXml.rootElement
+    var data = ""
+    tryCatch {
+        data = rootElement.attribute("package").value as String
+    }
+    var appElement = rootElement.element("application")
+    if (appElement != null) {
+
+        var element = appElement.elements("meta-data").filter { element ->
+            var name = element.attributeValue("name")
+            if (name != null) {
+                return@filter name == Application_Name
+            } else {
+                return@filter false
+            }
+        }.firstOrNull()
+        if (element != null) {
+            element.setAndroidAttribute("value", set.joinToString(","))
+        } else {
+            val domElement = DOMElement("meta-data")
+            domElement.addAttribute("android:name", Application_Name)
+            domElement.addAttribute("android:value", set.joinToString(","))
+            appElement.add(domElement)
+        }
+    }
+    saveXml(path, readXml)
+}
+
+private fun findApplication_Name(path: String): Set<String> {
+    var set = LinkedHashSet<String>()
+    var readXml = readXml(path)
+    val rootElement = readXml.rootElement
+    var data = ""
+    tryCatch {
+        data = rootElement.attribute("package").value as String
+    }
+    var appElement = rootElement.element("application")
+    if (appElement != null) {
+
+        var applicationName = appElement.attributeValue("name")
+        if (applicationName != null && applicationName.isNotBlank()) {
+            set.add(applicationName)
+        }
+        var element = appElement.elements("meta-data").filter { element ->
+            var name = element.attributeValue("name")
+            if (name != null) {
+                return@filter name == Application_Name
+            } else {
+                return@filter false
+            }
+        }.firstOrNull()
+        if (element != null) {
+            var value = element.attributeValue("value")
+            if (value != null) {
+                set.addAll(value.split(",").filter { it.isNotBlank() })
+            }
+        }
+    }
+    return set
+}
+
 
 /**
  * 找到启动activity
  * 并删除activity启动标记
  */
-private fun findAndDeleteLauncherActivity(path: String): String {
-    var activityName = ""
+private fun findAndDeleteLauncherActivitys(path: String, isDelete: Boolean = true): Set<String> {
+    var activityNames = LinkedHashSet<String>()
     val saxReader = SAXReader()
     val read = saxReader.readSafe(path)
     val rootElement = read.rootElement
-    val data = rootElement.attribute("package").data
-    rootElement.elements().forEach aaa@{
-        if (it.name.equals("application")) {
-            it.elements().forEach {
-                if (it.name.equals("activity")) {
-                    tryCatch(GlobalConfig.isLog) {
-                        val name = it.attribute("name").data as String
-                        if (hasLauncherActivity(it)) {
+    var data = ""
+    tryCatch {
+        data = rootElement.attribute("package").value as String
+    }
+
+    rootElement.elements("application").forEach { app ->
+        app.elements().forEach {
+            if (it.name.equals("activity") || it.name.equals("activity-alias")) {
+                tryCatch(GlobalConfig.isLog) {
+                    var activityName = it.attribute("name").data as String
+                    if (hasLauncherActivity(it)) {
+                        if (isDelete) {
                             deleteLauncherActivityCategory(it)
-                            activityName = name
-                            return@aaa
+                        }
+                        if (activityName.startsWith(".")) {
+                            activityName = "${data}${activityName}"
+                        }
+                        activityNames.add(activityName)
+                    }
+                }
+            } else if (it.name.equals("meta-data")) {
+                tryCatch(false) {
+                    var attributeValue = it.attributeValue("name")
+                    if (Launcher_Activity_Name == attributeValue) {
+                        var activitys = it.attributeValue("value")
+                        if (activitys != null) {
+                            val oldActivityS = activitys.split(",").filter { it.isNotBlank() }
+                            activityNames.addAll(oldActivityS)
                         }
                     }
-
                 }
             }
         }
     }
     saveXml(path, read)
-    if (activityName.startsWith(".")) {
-        activityName = "${data}${activityName}"
-    }
-    return activityName
+    return activityNames
 }
 
 private fun deleteLauncherActivityCategory(activityElement: Element) {
@@ -496,21 +591,29 @@ private fun hasReplaceLauncherActivity(path: String): Boolean {
     return hasReplaceLauncherActivity
 }
 
-private fun setReplaceLauncherActivity(path: String, activityName: String): Boolean {
+private const val Launcher_Activity_Name = "Launcher_Activity_Name"
+private fun setReplaceLauncherActivity(path: String, activityName: Set<String>): Boolean {
     var hasReplaceLauncherActivity = false
     val saxReader = SAXReader()
     val read = saxReader.readSafe(path)
     val rootElement = read.rootElement
-    var data = rootElement.attribute("package").data
     rootElement.elements().forEach {
         if (it.name.equals("application")) {
             it.elements().forEach {
                 if (it.name.equals("meta-data")) {
                     tryCatch(GlobalConfig.isLog) {
                         val name = it.attribute("name").data as String
-                        if ("Launcher_Activity_Name" == name) {
+                        if (Launcher_Activity_Name == name) {
                             hasReplaceLauncherActivity = true
-                            it.setAndroidAttribute("value", activityName)
+                            var newActivitySet = LinkedHashSet<String>()
+                            var activitys = it.attributeValue("value")
+                            if (activitys != null) {
+                                val oldActivityS = activitys.split(",").filter { it.isNotBlank() }
+                                newActivitySet.addAll(oldActivityS)
+                            }
+                            newActivitySet.addAll(activityName)
+                            var joinToString = newActivitySet.joinToString(separator = ",")
+                            it.setAndroidAttribute("value", joinToString)
                         }
                     }
 
