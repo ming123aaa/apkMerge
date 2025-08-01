@@ -216,6 +216,7 @@ fun setActivityAppTheme(manifestPath: String) {
                 }
             }
         }
+        saveXml(manifestPath, read)
     }
 }
 
