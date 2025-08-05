@@ -2,8 +2,11 @@ package com.ohuang.apkMerge
 
 import com.oh.gameSdkTool.bean.NewName
 import com.oh.gameSdkTool.bean.OldName
+import com.oh.gameSdkTool.config.GlobalConfig
 import com.ohuang.replacePackage.changTextLine
 import com.ohuang.replacePackage.moveFile
+import org.dom4j.Element
+import org.dom4j.QName
 import java.io.File
 import java.io.IOException
 import java.nio.file.Files
@@ -19,7 +22,7 @@ fun changeClassPackage(rootPath: String, changeClassMap: Map<OldName, NewName>) 
         println("开始重命名冲突Class-$rootPath")
         val pathMap = HashMap<String, String>()
         val classMap = HashMap<String, String>()
-//        var newClassDir = "$rootPath/smali_classes${findSmaliClasses.size + 1}"
+
 
         changeClassMap.forEach { (t, u) ->
             if (t.replace(".", "").isNotBlank() && u.replace(".", "").isNotBlank()) {
@@ -33,7 +36,7 @@ fun changeClassPackage(rootPath: String, changeClassMap: Map<OldName, NewName>) 
         findSmaliClasses.forEach {
             changeSmaliFile(it, pathMap)
         }
-//        changeSmaliFile(newClassDir, pathMap)
+
         forEachAllFile(File("$rootPath/res")) {
             if (it.name.endsWith(".xml")) {
                 renameForXml(it, classMap)
@@ -44,19 +47,66 @@ fun changeClassPackage(rootPath: String, changeClassMap: Map<OldName, NewName>) 
     }
 }
 
-private fun renameForXml(xmlFile: File, changeClassMap: Map<OldName, NewName>) {
+@Deprecated("请使用renameForXml()")
+private fun renameForXmlReplaceString(xmlFile: File, changeClassMap: Map<OldName, NewName>) {
     changTextLine(xmlFile.absolutePath) {
-        return@changTextLine hasChangeText(it, changeClassMap, startWiths = listOf<String>("/", "<", "\""), ".")
+        return@changTextLine hasChangeText(it, changeClassMap, startWiths = listOf<String>("/", "<", "\"", ">"), ".")
     }
 }
 
+private fun renameForXml(xmlFile: File, changeClassMap: Map<OldName, NewName>) {
+    tryCatch(GlobalConfig.isLog) {
+        var readXml = readXml(xmlFile.absolutePath)
+        var rootElement = readXml.rootElement
+        replaceXmlClass(rootElement, changeClassMap)
+        saveXml(xmlFile.absolutePath, readXml)
+    }
+}
+
+private fun shouldChangeText(text: String, changeClassMap: Map<OldName, NewName>): String {
+    if (text.isBlank()) {
+        return ""
+    }
+    changeClassMap.forEach {
+        if (text.startsWith(it.key)) {
+            var value = it.value
+            return value + text.substring(it.key.length)
+        }
+    }
+    return ""
+}
+
+
+private fun replaceXmlClass(element: Element, changeClassMap: Map<OldName, NewName>) {
+    var name = shouldChangeText(element.name, changeClassMap)
+
+    if (name.isNotEmpty()) {
+        element.name = name
+    }
+    var stringValue = shouldChangeText(element.textTrim, changeClassMap)
+    if (stringValue.isNotEmpty()) {
+        element.text = stringValue
+    }
+    element.attributes().toList().forEach { attr ->
+        var value = shouldChangeText(attr.value,changeClassMap)
+        if (value.isNotEmpty()) {
+            element.remove(attr)
+            element.addAttribute(attr.qName,value)
+        }
+    }
+    element.elements().forEach {
+        replaceXmlClass(it, changeClassMap)
+    }
+
+}
+
 private fun renamePackageFile(smaliDir: String, newDir: String, pathMap: Map<String, String>) {
-    pathMap.forEach { t, u ->
-        if (t.isBlank() || u.isBlank()) {
+    pathMap.forEach { oldClassPath, newClassPath ->
+        if (oldClassPath.isBlank() || newClassPath.isBlank()) {
             return@forEach
         }
-        val oldPath = smaliDir + "/" + t
-        val newPath = newDir + "/" + u
+        val oldPath = "$smaliDir/$oldClassPath"
+        val newPath = "$newDir/$newClassPath"
         val file = File(oldPath)
         if (file.exists()) {
 
@@ -92,7 +142,7 @@ private fun hasChangeText(
             startWiths.forEach { startWith ->
                 val oldString = startWith + it.key + endWith
                 if (string.contains(oldString)) {
-                    string=string.replace(oldString, startWith + it.value + endWith)
+                    string = string.replace(oldString, startWith + it.value + endWith)
                 }
             }
         }
