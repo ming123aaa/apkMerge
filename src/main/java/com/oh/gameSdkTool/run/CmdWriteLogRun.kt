@@ -30,9 +30,9 @@ class CmdWriteLogRun : CommandRun() {
             var outPath = commandArgs.outPath
             var file = File(outPath)
             ExecUtil.exec(arrayOf("cmd.exe", "/c", commandArgs.runCmdForWriteLog), 30 * 60, {
-                FileUtils.appendText(file, it)
+                FileUtils.appendText(file, it+"\n")
             }, {
-                FileUtils.appendText(file, it)
+                FileUtils.appendText(file, it+"\n")
             })
 
         }

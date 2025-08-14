@@ -11,9 +11,9 @@
   <component name="ChangeListManager">
     <list default="true" id="4eaafb40-8131-4eac-be98-0f0811b2834e" name="Changes" comment="fix(apkMerge): 修复 AndroidManifest.xml 处理异常&#10;&#10;&#10;- 修复keepActivityTheme命令不生效问题">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/AndroidManifestUtil.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/AndroidManifestUtil.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/MergeApk.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/MergeApk.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/ArgsRunTime.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/ArgsRunTime.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/run/CmdWriteLogRun.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/oh/gameSdkTool/run/CmdWriteLogRun.kt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -129,34 +129,34 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Gradle.Build gameSdkTool.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TestCode.test mergeYml.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.TestCode.test moveFile.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.apkMerge [assemble].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.apkMerge [init].executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.apkMerge [wrapper].executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.readMode.enableVisualFormatting&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;cf.first.check.clang-format&quot;: &quot;false&quot;,
-    &quot;cidr.known.project.marker&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;1.8&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;E:/kmpProject/KotlinProject&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Artifacts&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
-    &quot;show.do.not.copy.http.proxy.settings.to.gradle&quot;: &quot;false&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.Build gameSdkTool.executor": "Run",
+    "Gradle.TestCode.test mergeYml.executor": "Run",
+    "Gradle.TestCode.test moveFile.executor": "Run",
+    "Gradle.apkMerge [assemble].executor": "Run",
+    "Gradle.apkMerge [init].executor": "Run",
+    "Gradle.apkMerge [wrapper].executor": "Run",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.cidr.known.project.marker": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "RunOnceActivity.readMode.enableVisualFormatting": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "cf.first.check.clang-format": "false",
+    "cidr.known.project.marker": "true",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "jdk.selected.JAVA_MODULE": "1.8",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "E:/kmpProject/KotlinProject",
+    "project.structure.last.edited": "Artifacts",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.keymap",
+    "show.do.not.copy.http.proxy.settings.to.gradle": "false"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="E:\ideaProject\gameSdkTool\gameSdkTool\tools\jar" />
@@ -178,7 +178,7 @@
       <recent name="com.ohuang.apkMerge" />
     </key>
   </component>
-  <component name="RunManager" selected="Gradle.apkMerge [init]">
+  <component name="RunManager" selected="Gradle.apkMerge [assemble]">
     <configuration name="TestCode.test mergeYml" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />

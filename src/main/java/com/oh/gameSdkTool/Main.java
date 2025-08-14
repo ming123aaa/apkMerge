@@ -7,15 +7,15 @@ import java.util.ServiceLoader;
 public class Main {
 
     public static void main(String[] args) {
-        CommandArgs main = new CommandArgs();
+        CommandArgs mainCommandArgs = new CommandArgs();
         JCommander jCommander = JCommander.newBuilder()
-                .addObject(main)
+                .addObject(mainCommandArgs)
                 .build();
         jCommander.parse(args);
-        if (main.help) {
+        if (mainCommandArgs.help) {
             jCommander.usage();
         } else {
-            ArgsRunTime.INSTANCE.run(main);
+            ArgsRunTime.INSTANCE.run(mainCommandArgs,jCommander);
         }
     }
 }
