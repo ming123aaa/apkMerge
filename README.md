@@ -27,6 +27,7 @@ build->build Artifacts->选中刚刚设置的Artifacts->等待jar生成
 查看命令帮助
 java -jar gameSdkTool.jar -h
 常用用法已经写成.bat文件了，可以直接使用 [tools](tools)
+其中[tools/jar/gameSdkTool.jar](tools/jar/gameSdkTool.jar)可能不是最新版，需要替换成最新版
 
 注意:如果开启了windows实时保护功能,可能会让程序执行起来很慢,需要将操作的文件夹设置为windows安全中心的排除项。
 打开“设置” > “更新和安全” > “Windows 安全中心” > “病毒和威胁防护”。
