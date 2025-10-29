@@ -12,6 +12,8 @@ class AarConfig {
     var aarPathList: List<String> = emptyList() //需要合并的aar文件路径   示例 xxxx.aar
     var metaDataMap: Map<String, String> = TreeMap<String, String>() // meta-data修改
     var replaceStringManifest: List<ReplaceStringData> = emptyList() // AndroidManifest.xml 字符串替换   用于复杂的数据替换
+    var replaceStringSmali: List<ReplaceStringForFileName> = emptyList() // smali 字符串替换   用于复杂的数据替换
+    var replaceStringFile: List<ReplaceStringForPath> = emptyList() //字符串替换 用于复杂的数据替换
     var deleteFileList: List<String> = emptyList() //需要删除的文件， 示例 res/mipmap-anydpi
     var changeClassPackage: Map<OldName, NewName> = emptyMap() // 修改class所在的包名  com.xxx.yyy 中间用.隔开
     var deleteSmaliPaths: List<String> = emptyList() //需要删除的smail的文件   com/google   com/xxx/R.smali
@@ -30,6 +32,8 @@ data class AarConfigData(
     var aarPathList: List<File>, //需要合并的aar文件路径   示例 xxxx.aar
     var metaDataMap: Map<String, String>, // meta-data修改
     var replaceStringManifest: List<ReplaceStringData>, // AndroidManifest.xml 字符串替换   用于复杂的数据替换
+    var replaceStringSmali: List<ReplaceStringForFileName>,
+    var replaceStringFile: List<ReplaceStringForPath>,
     var deleteFileList: List<String>, //需要删除的文件， 示例 res/mipmap-anydpi
     var changeClassPackage: Map<OldName, NewName>, // 修改class所在的包名  com.xxx.yyy 中间用.隔开
     var smaliClassSizeMB: Double,//限制smaliClass文件的大小,避免方法数量超出限制无法打包,推荐值30MB，  只有 maxMB >= 1.0 && maxMB <= 1000 生效
@@ -38,7 +42,7 @@ data class AarConfigData(
     var isDeleteSameNameSmali: Boolean,  //是否删除相同名称的smali文件
     var deleteManifestNodeNames: Set<String>, //根据name删除的AndroidManifest.xml对应的节点)
     var isOptimizeSmaliClass: Boolean,
-    var applicationSetAttributeMap: Map<String, String> ,// application节点的属性修改
+    var applicationSetAttributeMap: Map<String, String>,// application节点的属性修改
     var manifestNodeSetAttributeMapByName: Map<String, Map<String, String>>  // 根据name修改的AndroidManifest.xml对应的节点的属性
 )
 
@@ -62,9 +66,11 @@ fun AarConfigData.toApkConfig(): ApkConfigBean {
         isDeleteSameNameSmali = isDeleteSameNameSmali,
         deleteManifestNodeNames = deleteManifestNodeNames,
         smaliClassSizeMB = smaliClassSizeMB, isOptimizeSmaliClass = isOptimizeSmaliClass,
-        compileSdkInfo= CompileSdkInfo(),
+        compileSdkInfo = CompileSdkInfo(),
         applicationSetAttributeMap = applicationSetAttributeMap,
-        manifestNodeSetAttributeMapByName = manifestNodeSetAttributeMapByName
+        manifestNodeSetAttributeMapByName = manifestNodeSetAttributeMapByName,
+        replaceStringSmali = replaceStringSmali,
+        replaceStringFile = replaceStringFile,
     )
 }
 
@@ -95,6 +101,8 @@ private fun createAarConfigData(path: String): AarConfigData {
         smaliClassSizeMB = fromJson.smaliClassSizeMB,
         isOptimizeSmaliClass = fromJson.isOptimizeSmaliClass,
         applicationSetAttributeMap = fromJson.applicationSetAttributeMap,
-        manifestNodeSetAttributeMapByName = fromJson.manifestNodeSetAttributeMapByName
+        manifestNodeSetAttributeMapByName = fromJson.manifestNodeSetAttributeMapByName,
+        replaceStringSmali = fromJson.replaceStringSmali,
+        replaceStringFile = fromJson.replaceStringFile
     )
 }

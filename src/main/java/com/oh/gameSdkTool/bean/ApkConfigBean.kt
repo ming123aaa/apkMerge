@@ -4,7 +4,6 @@ import com.google.gson.Gson
 import com.oh.gameSdkTool.CommandArgs
 import com.ohuang.replacePackage.FileUtils
 import java.io.File
-import java.util.TreeMap
 
 /**
  * apk 配置
@@ -21,6 +20,8 @@ data class ApkConfigBean(
     var abiNames: List<String>,
     var metaDataMap: Map<String, String>,
     var replaceStringManifest: List<ReplaceStringData>,
+    var replaceStringSmali: List<ReplaceStringForFileName>,
+    var replaceStringFile: List<ReplaceStringForPath>,
     var deleteFileList: List<String>, //相对路径
     var changeClassPackage: Map<OldName, NewName>,
     var renameResMap: Map<ResType, Map<OldName, NewName>>,
@@ -74,13 +75,15 @@ fun getApkConfigBean(apkConfigPath: String): ApkConfigBean {
         deleteFileList = fromJson.deleteFileList,
         changeClassPackage = fromJson.changeClassPackage,
         renameResMap = fromJson.renameResMap,
-        smaliClassSizeMB=fromJson.smaliClassSizeMB,
+        smaliClassSizeMB = fromJson.smaliClassSizeMB,
         deleteSmaliPaths = fromJson.deleteSmaliPaths,
         isDeleteSameNameSmali = fromJson.isDeleteSameNameSmali,
         deleteManifestNodeNames = fromJson.deleteManifestNodeNames,
-        isOptimizeSmaliClass=fromJson.isOptimizeSmaliClass,
-        compileSdkInfo=fromJson.compileSdkInfo,
+        isOptimizeSmaliClass = fromJson.isOptimizeSmaliClass,
+        compileSdkInfo = fromJson.compileSdkInfo,
         applicationSetAttributeMap = fromJson.applicationSetAttributeMap,
-        manifestNodeSetAttributeMapByName = fromJson.manifestNodeSetAttributeMapByName
+        manifestNodeSetAttributeMapByName = fromJson.manifestNodeSetAttributeMapByName,
+        replaceStringSmali = fromJson.replaceStringSmali,
+        replaceStringFile = fromJson.replaceStringFile,
     )
 }

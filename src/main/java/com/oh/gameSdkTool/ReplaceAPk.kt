@@ -21,12 +21,16 @@ object ReplaceAPk {
         replaceManifestAndYml(
             rootPath = rootPath,
             apkConfigBean = apkConfigBean
-        )
+        )//修改androidManifest.xml和apktool.yml
+
+        replaceSmaliString(rootPath,apkConfigBean)//替换smali文件的内容
+        replaceFileString(rootPath,apkConfigBean) //替换指定文件内容
         replaceDeleteFile(rootPath,apkConfigBean) //删除指定文件
         limitMaxSize_smali_class_Dir(rootPath, apkConfigBean.smaliClassSizeMB) //限制单个smali_classes文件夹大小
         if (apkConfigBean.isOptimizeSmaliClass) {
             limitDex_smali_class_Dir(rootPath) //限制65535
         }
+
         println("ApkConfig内容修改完成:用时${(System.currentTimeMillis() - startTime) / 1000}s")
 
     }
@@ -63,8 +67,9 @@ object ReplaceAPk {
         }
     }
 
-
-
+    /**
+     *  修改androidManifest.xml和apktool.yml
+     */
     private fun replaceManifestAndYml(
         rootPath: String,
         apkConfigBean: ApkConfigBean

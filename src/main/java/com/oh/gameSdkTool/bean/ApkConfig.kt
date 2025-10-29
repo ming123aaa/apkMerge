@@ -1,9 +1,5 @@
 package com.oh.gameSdkTool.bean
 
-import com.google.gson.Gson
-import com.oh.gameSdkTool.CommandArgs
-import com.ohuang.replacePackage.FileUtils
-import java.io.File
 import java.util.TreeMap
 typealias ResType = String
 typealias OldName = String
@@ -35,6 +31,8 @@ class ApkConfig {
      */
     var metaDataMap: Map<String, String> = TreeMap<String, String>() // meta-data修改
     var replaceStringManifest: List<ReplaceStringData> = emptyList() // AndroidManifest.xml 字符串替换   用于复杂的数据替换
+    var replaceStringSmali: List<ReplaceStringForFileName> = emptyList() // smali 字符串替换   用于复杂的数据替换
+    var replaceStringFile: List<ReplaceStringForPath> = emptyList() //指定文件  字符串替换 用于复杂的数据替换
     var deleteFileList: List<String> = emptyList() //需要删除的文件， 示例 res/mipmap-anydpi
 
     /**示例:
@@ -104,6 +102,30 @@ class ReplaceStringData {
     var matchString: String = ""
     var replaceString: String = ""
 
+}
+class ReplaceStringForFileName {
+    /**
+     * fileName字段说明
+     * 不填写代表全部文件都进行字符串替换,
+     * 若填写满足namePath.contains(fileName)的文件才会进行字符串替换
+     * 其中namePath代表的是文件相对路径,namePath格式示例:com/AA/aaa.smali
+     */
+    var fileName=""
+    var isRegex = false
+    var matchString: String = ""
+    var replaceString: String = ""
+    var appendString: String=""
+}
+
+class ReplaceStringForPath{
+    /**
+     * 其中namePath代表的是文件相对路径,namePath格式示例:com/AA/aaa.smali
+     */
+    var namePath=""
+    var isRegex = false
+    var matchString: String = ""
+    var replaceString: String = ""
+    var appendString: String=""
 }
 
 
