@@ -119,7 +119,7 @@ class ReplaceStringForFileName {
 
 class ReplaceStringForPath{
     /**
-     * 其中namePath代表的是文件相对路径,namePath格式示例:com/AA/aaa.smali
+     * 其中namePath代表的是文件相对路径,namePath格式示例:res/layout/activity.xml
      */
     var namePath=""
     var isRegex = false
