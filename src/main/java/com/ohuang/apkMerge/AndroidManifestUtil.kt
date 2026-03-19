@@ -482,7 +482,8 @@ private fun findAndDeleteLauncherActivitys(path: String, isDelete: Boolean = tru
     tryCatch {
         data = rootElement.attribute("package").value as String
     }
-
+    var launcherActivityName: MutableList<String> = mutableListOf()
+    var oldActivitys: List<String> = listOf()
     rootElement.elements("application").forEach { app ->
         app.elements().forEach {
             if (it.name.equals("activity") || it.name.equals("activity-alias")) {
@@ -495,7 +496,9 @@ private fun findAndDeleteLauncherActivitys(path: String, isDelete: Boolean = tru
                         if (activityName.startsWith(".")) {
                             activityName = "${data}${activityName}"
                         }
-                        activityNames.add(activityName)
+                        if (activityName.isNotBlank()) {
+                            launcherActivityName.add(activityName)
+                        }
                     }
                 }
             } else if (it.name.equals("meta-data")) {
@@ -504,14 +507,18 @@ private fun findAndDeleteLauncherActivitys(path: String, isDelete: Boolean = tru
                     if (Launcher_Activity_Name == attributeValue) {
                         var activitys = it.attributeValue("value")
                         if (activitys != null) {
-                            val oldActivityS = activitys.split(",").filter { it.isNotBlank() }
-                            activityNames.addAll(oldActivityS)
+                            oldActivitys = activitys.split(",").filter { it.isNotBlank() }
+
                         }
                     }
                 }
             }
         }
     }
+    if (launcherActivityName.isNotEmpty()) {
+        activityNames.addAll(launcherActivityName)
+    }
+    activityNames.addAll(oldActivitys)
     saveXml(path, read)
     return activityNames
 }
