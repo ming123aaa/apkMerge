@@ -105,7 +105,7 @@ public class CommandArgs {
     public String aarConfig="";
 
 
-    @Parameter(names = {"-test"}, description = "action命令,测试运行")
+    @Parameter(names = {"-test"}, description = "action命令,用于测试命令,请勿使用 ")
     public boolean isTest = false;
 
     @Parameter(names = {"-outApkConfig"}, description = "action命令,输出ApkConfig.json的模板  需要使用-out设置输出路径的文件夹")
@@ -140,10 +140,10 @@ public class CommandArgs {
             "、-libs一起使用")
     public Boolean isGenerateMultipleChannelApk=false;
 
-    @Parameter(names = {"-toUnzip"},description = "action命令,解压apk 需要配合-basePath、-out")
+    @Parameter(names = {"-toUnzip"},description = "action命令,解压apk/zip 需要配合-basePath、-out")
     public boolean toUnzip=false;
 
-    @Parameter(names = {"-toZip"},description = "action命令,压缩apk 需要配合-basePath、-out")
+    @Parameter(names = {"-toZip"},description = "action命令,压缩apk/zip 需要配合-basePath、-out")
     public boolean toZip=false;
 
     @Parameter(names = {"-apk2aar","-apkToAar"},description = "action命令,将apk转化为aar,配合命令-basePath、-out、-lib、-aarConfig")
@@ -155,7 +155,7 @@ public class CommandArgs {
     @Parameter(names = {"-showSmaliInfo"},description = "action命令,配合-basePath,查看smali_classes信息")
     public boolean showSmaliInfo=false;
 
-    @Parameter(names = {"-runCmdForWriteLog"},description = "action命令,配合-out设置输出文件,调用命令并输出日志")
+    @Parameter(names = {"-runCmdForWriteLog"},description = "action命令,运行命令写日志文件。只需输入一个命令,会运行该命令并输出日志文件,使用-out设置日志输出的文件")
     public String runCmdForWriteLog="";
 
     @Parameter(names = {"-help", "-h"}, help = true, description = "查看帮助")
