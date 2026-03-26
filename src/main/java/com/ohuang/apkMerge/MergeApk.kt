@@ -18,7 +18,8 @@ fun mergeApkSmali(
         isRenameRes = commandArgs.isRenameRes,
         notUseDefaultKeepClassPackage = commandArgs.notUseDefaultKeepClassPackage,
         isReNameStyle = commandArgs.isReNameStyle,
-        isReNameAttr = commandArgs.isReNameAttr
+        isReNameAttr = commandArgs.isReNameAttr,
+        commandArgs = commandArgs
     )
     mergeApk(
         channelSmali = channelSmali,
@@ -50,25 +51,45 @@ private fun mergeApkPre(
     isRenameRes: Boolean,
     notUseDefaultKeepClassPackage: Boolean,
     isReNameStyle: Boolean,
-    isReNameAttr: Boolean
+    isReNameAttr: Boolean,
+    commandArgs: CommandArgs
 ) {
     mergeApkPreReplace(channelSmali) //合并前替换
 
     var startsWithName = getMaigicNum_a_z(System.currentTimeMillis())
+    var isUseChanelRes = commandArgs.isUseChannelFileRes || commandArgs.isChannelRes  //使用渠道包资源
+    var isUseChanelCode = commandArgs.isChannelCode  //使用渠道包代码
 
     //资源冲突重命名
     mergeApkRenameRes(
-        channelSmali = channelSmali,
-        baseSmali = baseSmali,
+        channelSmali = if (isUseChanelRes) {
+            baseSmali
+        } else {
+            channelSmali
+        },
+        baseSmali = if (isUseChanelRes) {
+            channelSmali
+        } else {
+            baseSmali
+        },
         startsWithName = startsWithName,
         isReNameStyle = isReNameStyle,
         isRenameRes = isRenameRes, isReNameAttr = isReNameAttr
     )
 
     if (isRenameClassPackage) { //class冲突重命名
+
         mergeApkRenameClass(
-            channelSmali = channelSmali,
-            baseSmali = baseSmali,
+            channelSmali = if (isUseChanelCode) {
+                baseSmali
+            } else {
+                channelSmali
+            },
+            baseSmali = if (isUseChanelCode) {
+                channelSmali
+            } else {
+                baseSmali
+            },
             startsWithName = startsWithName,
             notUseDefaultKeepClassPackage = notUseDefaultKeepClassPackage
         )
@@ -76,7 +97,7 @@ private fun mergeApkPre(
     mergeApkRenameKeepJson(
         channelSmali = channelSmali,
         baseSmali = baseSmali
-    )//合并keep规则
+    )//合并keep规则,
 
 }
 
