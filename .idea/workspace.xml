@@ -9,10 +9,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="4eaafb40-8131-4eac-be98-0f0811b2834e" name="Changes" comment="修改文档">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/MergeApk.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/com/ohuang/apkMerge/MergeApk.kt" afterDir="false" />
-    </list>
+    <list default="true" id="4eaafb40-8131-4eac-be98-0f0811b2834e" name="Changes" comment="修复冲突重命名问题" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -422,7 +419,15 @@
       <option name="project" value="LOCAL" />
       <updated>1770343173955</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="修复冲突重命名问题">
+      <option name="closed" value="true" />
+      <created>1774518269729</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1774518269729</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="Vcs.Log.History.Properties">
@@ -474,6 +479,7 @@
     <MESSAGE value="feat: 新增字符串替换工具类&#10;&#10;- 添加 ReplaceFileString 类用于文件字符串替换&#10;- 添加 ReplaceSmaliString 类用于 Smali 字符串替换&#10;- 为 APK 合并功能提供基础字符串处理工具" />
     <MESSAGE value="修改readme" />
     <MESSAGE value="修改文档" />
-    <option name="LAST_COMMIT_MESSAGE" value="修改文档" />
+    <MESSAGE value="修复冲突重命名问题" />
+    <option name="LAST_COMMIT_MESSAGE" value="修复冲突重命名问题" />
   </component>
 </project>

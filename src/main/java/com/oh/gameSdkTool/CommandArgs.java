@@ -77,7 +77,7 @@ public class CommandArgs {
 
     @Parameter(names = {"-isRenameRes"},description = "res出现重名情况,是否重命名。apk合并时使用")
     public Boolean isRenameRes=false;
-    @Parameter(names = {"-isReNameStyle"},description = "不重命名style,需要配合-isRenameRes使用")
+    @Parameter(names = {"-isReNameStyle"},description = "重命名style,需要配合-isRenameRes使用")
     public boolean isReNameStyle=false;
 
 
